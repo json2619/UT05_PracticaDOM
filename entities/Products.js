@@ -1,3 +1,13 @@
+import {
+    BaseException,
+    InvalidConstructorException,
+    EmptyValueException,
+    InvalidObjectException,
+    RegisteredObjectException,
+    NonRegisteredObjectException,
+    NotFunctionException
+} from "../js/Exceptions";
+
 class Allergen {
     #name
     #description

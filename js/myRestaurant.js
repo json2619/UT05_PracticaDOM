@@ -1,0 +1,1 @@
+import { RestaurantApp } from "../js/RestaurantApp.js";
