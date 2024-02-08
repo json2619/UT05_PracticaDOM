@@ -6,7 +6,7 @@ import {
     RegisteredObjectException,
     NonRegisteredObjectException,
     NotFunctionException
-} from "../js/Exceptions";
+} from "../js/Exceptions.js";
 
 class Allergen {
     #name

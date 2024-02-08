@@ -1,6 +1,6 @@
-import Restaurant from '../js/Restaurant.js';
-import RestaurantController from '../js/RestaurantController.js';
-import RestaurantView from '../js/RestaurantView.js';
+import Restaurant from './Restaurant.js';
+import RestaurantController from './RestaurantController.js';
+import RestaurantView from './RestaurantView.js';
 
 const RestaurantApp = new RestaurantController(
     Restaurant.getInstance(),

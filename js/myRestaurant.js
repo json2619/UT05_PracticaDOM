@@ -1,1 +1,1 @@
-import { RestaurantApp } from "../js/RestaurantApp.js";
+import RestaurantApp from './RestaurantApp.js';

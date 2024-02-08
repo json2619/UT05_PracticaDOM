@@ -71,3 +71,13 @@ function NotFunctionException() {
 
 NotFunctionException.prototype = Object.create(BaseException.prototype);
 NotFunctionException.prototype.constructor = NotFunctionException;
+
+export {
+    BaseException,
+    InvalidConstructorException,
+    EmptyValueException,
+    InvalidObjectException,
+    RegisteredObjectException,
+    NonRegisteredObjectException,
+    NotFunctionException
+};

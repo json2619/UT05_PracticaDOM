@@ -9,7 +9,7 @@ import {
 } from "../js/Exceptions.js";
 
 import {
-    Allergen, Category, Coordinate, Dish, Menu, Restaurant
+    Category, Allergen, Coordinate, Dish, Menu, Restaurant
 } from "../entities/Products.js";
 
 const RestaurantsManager = (function () {
@@ -46,7 +46,12 @@ const RestaurantsManager = (function () {
             return this.#restaurants[Symbol.iterator]();
         }
 
+        getDishes() {
+            return this.#dishes;
+        }
+
         addCategory(category) {
+
             if (!(category instanceof Category)) throw new InvalidObjectException();
 
             if (this.#categories.has(category.getName())) throw new RegisteredObjectException();
@@ -193,14 +198,16 @@ const RestaurantsManager = (function () {
         }
 
         assignCategoryToDish(dish, ...categories) {
-            // Verificar si la categoría y el plato son objetos válidos
-            if (!category || !dish) {
-                throw new EmptyValueException();
-            }
 
             // Verificar si la categoría y el plato existen en el sistema
 
             for (const category of categories) {
+
+                // Verificar si la categoría y el plato son objetos válidos
+                if (!category || !dish) {
+                    throw new EmptyValueException();
+                }
+
                 if (this.#categories.has(category.getName())) {
 
                     if (this.#dishes.has(dish.getName())) {
@@ -224,12 +231,13 @@ const RestaurantsManager = (function () {
         }
 
         deassingCategoryFromDish(dish, ...categories) {
-            // Verificar si la categoría y el plato son objetos válidos
-            if (!category || !dish) {
-                throw new EmptyValueException();
-            }
 
             for (const category of categories) {
+                // Verificar si la categoría y el plato son objetos válidos
+                if (!category || !dish) {
+                    throw new EmptyValueException();
+                }
+
                 // Obtener el objeto del plato
                 if (this.#categories.has(category.getName()) && this.#dishes.has(dish.getName())) {
                     for (let [name, value] of this.#dishes) {
@@ -249,11 +257,11 @@ const RestaurantsManager = (function () {
         }
 
         assignAllergenToDish(dish, ...allergens) {
-            if (!allergen || !dish) {
-                throw new EmptyValueException();
-            }
 
             for (const allergen of allergens) {
+                if (!allergen || !dish) {
+                    throw new EmptyValueException();
+                }
                 // Verificar si la categoría y el plato existen en el sistema
                 if (this.#allergens.has(allergen.getName())) {
 
@@ -278,12 +286,12 @@ const RestaurantsManager = (function () {
         }
 
         deassignAllergenToDish(dish, ...allergens) {
-            // Verificar si la categoría y el plato son objetos válidos
-            if (!allergen || !dish) {
-                throw new EmptyValueException();
-            }
 
             for (const allergen of allergens) {
+                // Verificar si la categoría y el plato son objetos válidos
+                if (!allergen || !dish) {
+                    throw new EmptyValueException();
+                }
                 // Obtener la posición del alergeno que queremos quitar
                 if (this.#allergens.has(allergen.getName()) && this.#dishes.has(dish.getName())) {
                     for (let [name, value] of this.#dishes) {
@@ -302,12 +310,12 @@ const RestaurantsManager = (function () {
         }
 
         assignDishToMenu(menu, ...dishes) {
-            // Verificar si la categoría y el plato son objetos válidos
-            if (!menu || !dish) {
-                throw new EmptyValueException();
-            }
 
             for (const dish of dishes) {
+                // Verificar si la categoría y el plato son objetos válidos
+                if (!menu || !dish) {
+                    throw new EmptyValueException();
+                }
                 // Verificar si la categoría y el plato existen en el sistema
                 if (this.#menus.has(menu.getName())) {
                     // Obtener la categoría existente y el plato existente
@@ -330,12 +338,12 @@ const RestaurantsManager = (function () {
         }
 
         deassignDishToMenu(menu, ...dishes) {
-            // Verificar si la categoría y el plato son objetos válidos
-            if (!menu || !dish) {
-                throw new EmptyValueException();
-            }
-
             for (const dish of dishes) {
+                // Verificar si la categoría y el plato son objetos válidos
+                if (!menu || !dish) {
+                    throw new EmptyValueException();
+                }
+
                 // Obtener la posición del alergeno que queremos quitar
                 if (this.#menus.has(menu.getName()) && this.#dishes.has(dish.getName())) {
                     for (let [name, value] of this.#menus) {
