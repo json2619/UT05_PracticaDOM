@@ -56,7 +56,9 @@ class RestaurantController {
             .addDish(dish9).addDish(dish10).addDish(dish11).addDish(dish12)
             .addRestaurant(restaurant1).addRestaurant(restaurant2).addRestaurant(restaurant3);
 
-        this[MODEL].assignCategoryToDish(dish1, category1);
+        this[MODEL].assignCategoryToDish(dish1, category1).assignCategoryToDish(dish2, category1).assignCategoryToDish(dish3, category1).assignCategoryToDish(dish4, category1)
+            .assignCategoryToDish(dish5, category3).assignCategoryToDish(dish6, category3).assignCategoryToDish(dish7, category3).assignCategoryToDish(dish8, category3)
+            .assignCategoryToDish(dish9, category2).assignCategoryToDish(dish10, category2).assignCategoryToDish(dish11, category2).assignCategoryToDish(dish12, category2);
         this[MODEL].assignAllergenToDish(dish1, allergen1);
         this[MODEL].assignAllergenToDish(dish1, allergen2)
         this[MODEL].assignDishToMenu(menu1, dish1);
@@ -71,6 +73,7 @@ class RestaurantController {
     };
 
     onInit = () => {
+        this[VIEW].bindProductsCategoryList(this.handledishesCategoryList);
     }
 
     handleInit = () => {
@@ -79,6 +82,13 @@ class RestaurantController {
 
     onAddCategory = () => {
         this[VIEW].showMenuCategories(this[MODEL].getCategories());
+        this[VIEW].bindProductsCategoryListInMenu(this.handledishesCategoryList);
+    };
+
+    handledishesCategoryList = (title) => {
+        const category = this[MODEL].getCategory(title)
+        const dishes = this[MODEL].getDishesInCategory(category, (resource) => resource.getName() === title);
+        this[VIEW].listProducts(dishes, category.getName());
     };
 
 }

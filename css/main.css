@@ -1,14 +1,12 @@
 body {
-  background-image: url("/UT05_PracticaDOM/img/fondo.jpg");
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-position: center;
+  background-color: #343a40;
   font-family: sans-serif;
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
   height: 100%;
+  width: 100%;
 }
 
 header {
@@ -50,12 +48,12 @@ header {
 
 ul.principal {
   border-radius: 10px;
-  width: 90%;
+  width: 100%;
   padding: 10px;
   list-style: none;
   display: flex;
-  justify-content: space-around;
   margin-top: 40px;
+  background-color: red;
 }
 
 .menu_nav {
@@ -126,13 +124,13 @@ ul.principal {
 }
 
 .hero__title {
-  padding-top: 120px;
-  color: white;
+  margin-top: 120px;
+  color: rgb(240, 11, 11);
   font-size: 30px;
 }
 
 .hero__description {
-  color: white;
+  color: rgb(240, 11, 11);
   font-size: 20px;
 }
 
@@ -283,6 +281,7 @@ ul.principal {
   background-color: rgb(226, 36, 36);
   padding: 20px;
   border-radius: 10px;
+  width: 90%;
 }
 
 .reviews__title {
@@ -490,4 +489,57 @@ footer {
 }
 .Tablet-style {
   border: 2px solid #faa541;
+}
+
+.card {
+  border: none;
+}
+.product {
+  background-color: #eee;
+}
+.brand {
+  font-size: 13px;
+}
+.act-price {
+  color: #faa541;
+  font-weight: 700;
+}
+.dis-price {
+  text-decoration: line-through;
+}
+.about {
+  font-size: 14px;
+}
+.color {
+  margin-bottom: 10px;
+}
+label.radio {
+  cursor: pointer;
+}
+label.radio input {
+  position: absolute;
+  top: 0;
+  left: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+label.radio span {
+  padding: 2px 9px;
+  border: 2px solid #faa541;
+  display: inline-block;
+  color: #faa541;
+  border-radius: 3px;
+  text-transform: uppercase;
+}
+label.radio input:checked + span {
+  border-color: #faa541;
+  background-color: #faa541;
+  color: #fff;
+}
+.cart i {
+  margin-right: 10px;
+}
+#main-image {
+  width: 100%;
 }

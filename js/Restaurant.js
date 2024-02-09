@@ -34,6 +34,10 @@ const RestaurantsManager = (function () {
             return this.#categories[Symbol.iterator]();
         }
 
+        getCategory(title) {
+            return this.#categories.get(title);
+        }
+
         getMenus() {
             return this.#menus[Symbol.iterator]();
         }
@@ -381,7 +385,7 @@ const RestaurantsManager = (function () {
             return this; // Retornar la instancia para encadenar
         }
 
-        getDishesInCategory(category, order = null) {
+        getDishesInCategory(category, criteria) {
             if (!category) {
                 throw new EmptyValueException();
             }
@@ -393,8 +397,11 @@ const RestaurantsManager = (function () {
             const filteredDishes = [];
 
             for (const [name, value] of this.#dishes) {
-                if (value.dishCategory.some(cat => cat.getName() === category.getName())) {
-                    filteredDishes.push(value.newDish);
+
+                for (const category of value.dishCategory) {
+                    if (criteria(category)) {
+                        filteredDishes.push(value.newDish);
+                    }
                 }
             }
 
