@@ -54,6 +54,10 @@ const RestaurantsManager = (function () {
             return this.#dishes;
         }
 
+        getDish(title) {
+            return this.#dishes.get(title).newDish;
+        }
+
         addCategory(category) {
 
             if (!(category instanceof Category)) throw new InvalidObjectException();
@@ -444,14 +448,14 @@ const RestaurantsManager = (function () {
         }
 
         // Metodo que crea un plato y devuelve un objeto dish
-        createDish(name, description, ingredients) {
+        createDish(serial, name, description, ingredients, image, price) {
             // Declaramos la variable plato que vamos a devolver
             let dish;
 
             if (this.#dishes.has(name)) {
                 dish = this.#dishes.get(name).dish;
             } else {
-                dish = new Dish(name, description, ingredients);
+                dish = new Dish(serial, name, description, ingredients, image, price);
             }
 
             // Devolvemos el plato

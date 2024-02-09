@@ -113,12 +113,14 @@ class Coordinate {
 }
 
 class Dish {
+    #serial
     #name
     #description
     #ingredients
     #image
+    #price
 
-    constructor(name, description = '', ingredients = '') {
+    constructor(serial, name, description = '', ingredients = '', image, price) {
 
         // Comprobamoes si no se introduce ningun valor, lanzamos excepcion
         if (name === undefined || name === "") throw new EmptyValueException();
@@ -126,10 +128,20 @@ class Dish {
         // Comprobamos que se cree con el operador new
         if (!(new.target === Dish)) throw new InvalidConstructorException();
 
+        this.#serial = serial;
         this.#name = name;
         this.#description = description;
         this.#ingredients = ingredients;
-        this.#image = "";
+        this.#image = image;
+        this.#price = price;
+    }
+
+    getSerial() {
+        return this.#serial;
+    }
+
+    setSerial(newSerial) {
+        this.#serial = newSerial;
     }
 
     getName() {
@@ -164,8 +176,16 @@ class Dish {
         this.#image = newImage;
     }
 
+    getPrice() {
+        return this.#price;
+    }
+
+    setPrice(newPrice) {
+        this.#price = newPrice;
+    }
+
     toString() {
-        return `Dish: ${this.#name}, Description: ${this.#description}, Ingredients: ${this.#ingredients}, Image: ${this.#image}`;
+        return `Dish: ${this.#name}, Description: ${this.#description}, Ingredients: ${this.#ingredients}, Price: ${this.#price}`;
     }
 }
 

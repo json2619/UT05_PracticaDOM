@@ -65,7 +65,7 @@ ul.principal {
 }
 
 .menu_nav a {
-  color: white;
+  color: black;
   text-decoration: none;
   text-shadow: 1px 1px 1px white;
   font-weight: bold;
@@ -478,17 +478,17 @@ footer {
 .bi {
   color: #faa541;
 }
-.Laptop-style {
+
+.Entrantes-style {
   border: 2px solid red;
 }
-.Camera-style {
+
+.Sopas-style {
   border: 2px solid green;
 }
-.Smartphone-style {
+
+.Ensaladas-style {
   border: 2px solid blue;
-}
-.Tablet-style {
-  border: 2px solid #faa541;
 }
 
 .card {

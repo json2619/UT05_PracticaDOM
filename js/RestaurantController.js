@@ -17,7 +17,7 @@ class RestaurantController {
     }
 
     [LOAD_RESTAURANT_OBJECT]() {
-        const category1 = this[MODEL].createCategory('Entradas', 'Es un plato de comida que puede consumirse como 1er plato un plato de menor cantidad de comida que el plato principal.');
+        const category1 = this[MODEL].createCategory('Entrantes', 'Es un plato de comida que puede consumirse como 1er plato un plato de menor cantidad de comida que el plato principal.');
         const category2 = this[MODEL].createCategory('Sopas', 'Son preparaciones culinarias consistentes en un líquido con sustancia y mucho sabor. En algunos casos poseen ingredientes sólido.');
         const category3 = this[MODEL].createCategory('Ensaladas', 'Las ensaladas pueden estar compuestas de verduras, frutas y/o proteínas. Pueden tener ingredientes crudos y/o cocidos.');
 
@@ -26,20 +26,20 @@ class RestaurantController {
         const allergen3 = this[MODEL].createAllergen('Allergen3', 'Description 3');
         const allergen4 = this[MODEL].createAllergen('Allergen4', 'Description 4');
 
-        const dish1 = this[MODEL].createDish('Entrante1', 'Descripción del Entrante 1', 'Ingrediente1, Ingrediente2');
-        const dish2 = this[MODEL].createDish('Entrante2', 'Descripción del Entrante 2', 'Ingrediente3, Ingrediente4');
-        const dish3 = this[MODEL].createDish('Entrante3', 'Descripción del Entrante 3', 'Ingrediente5, Ingrediente6');
-        const dish4 = this[MODEL].createDish('Entrante4', 'Descripción del Entrante 4', 'Ingrediente7, Ingrediente8');
+        const dish1 = this[MODEL].createDish('1', 'Entrante1', 'Descripción del Entrante 1', 'Ingrediente1, Ingrediente2', 'img/platos/entrante1.jpg', 10.99);
+        const dish2 = this[MODEL].createDish('2', 'Entrante2', 'Descripción del Entrante 2', 'Ingrediente3, Ingrediente4', 'img/platos/entrante2.jpg', 12.99);
+        const dish3 = this[MODEL].createDish('3', 'Entrante3', 'Descripción del Entrante 3', 'Ingrediente5, Ingrediente6', 'img/platos/entrante3.jpg', 9.99);
+        const dish4 = this[MODEL].createDish('4', 'Entrante4', 'Descripción del Entrante 4', 'Ingrediente7, Ingrediente8', 'img/platos/entrante4.jpg', 11.99);
 
-        const dish5 = this[MODEL].createDish('Ensalada1', 'Descripción de la Ensalada 1', 'Ingrediente9, Ingrediente10');
-        const dish6 = this[MODEL].createDish('Ensalada2', 'Descripción de la Ensalada 2', 'Ingrediente11, Ingrediente12');
-        const dish7 = this[MODEL].createDish('Ensalada3', 'Descripción de la Ensalada 3', 'Ingrediente13, Ingrediente14');
-        const dish8 = this[MODEL].createDish('Ensalada4', 'Descripción de la Ensalada 4', 'Ingrediente15, Ingrediente16');
+        const dish5 = this[MODEL].createDish('5', 'Ensalada1', 'Descripción de la Ensalada 1', 'Ingrediente9, Ingrediente10', 'img/platos/ensalada1.jpg', 8.99);
+        const dish6 = this[MODEL].createDish('6', 'Ensalada2', 'Descripción de la Ensalada 2', 'Ingrediente11, Ingrediente12', 'img/platos/ensalada2.jpg', 7.99);
+        const dish7 = this[MODEL].createDish('7', 'Ensalada3', 'Descripción de la Ensalada 3', 'Ingrediente13, Ingrediente14', 'img/platos/ensalada3.jpg', 10.99);
+        const dish8 = this[MODEL].createDish('8', 'Ensalada4', 'Descripción de la Ensalada 4', 'Ingrediente15, Ingrediente16', 'img/platos/ensalada4.jpg', 9.99);
 
-        const dish9 = this[MODEL].createDish('Sopa1', 'Descripción de la Sopa 1', 'Ingrediente17, Ingrediente18');
-        const dish10 = this[MODEL].createDish('Sopa2', 'Descripción de la Sopa 2', 'Ingrediente19, Ingrediente20');
-        const dish11 = this[MODEL].createDish('Sopa3', 'Descripción de la Sopa 3', 'Ingrediente21, Ingrediente22');
-        const dish12 = this[MODEL].createDish('Sopa4', 'Descripción de la Sopa 4', 'Ingrediente23, Ingrediente24');
+        const dish9 = this[MODEL].createDish('9', 'Sopa1', 'Descripción de la Sopa 1', 'Ingrediente17, Ingrediente18', 'img/platos/sopa1.jpg', 6.99);
+        const dish10 = this[MODEL].createDish('10', 'Sopa2', 'Descripción de la Sopa 2', 'Ingrediente19, Ingrediente20', 'img/platos/sopa2.jpg', 5.99);
+        const dish11 = this[MODEL].createDish('11', 'Sopa3', 'Descripción de la Sopa 3', 'Ingrediente21, Ingrediente22', 'img/platos/sopa3.jpg', 8.99);
+        const dish12 = this[MODEL].createDish('12', 'Sopa4', 'Descripción de la Sopa 4', 'Ingrediente23, Ingrediente24', 'img/platos/sopa4.jpg', 7.99);
 
         const menu1 = this[MODEL].createMenu('Menu1', 'Menu Description 1');
         const menu2 = this[MODEL].createMenu('Menu2', 'Menu Description 2');
@@ -82,6 +82,9 @@ class RestaurantController {
 
     onAddCategory = () => {
         this[VIEW].showMenuCategories(this[MODEL].getCategories());
+        this[VIEW].showMenuAllergens(this[MODEL].getAllergens());
+        this[VIEW].showMenuRestaurants(this[MODEL].getRestaurants());
+        this[VIEW].showMenu(this[MODEL].getMenus());
         this[VIEW].bindProductsCategoryListInMenu(this.handledishesCategoryList);
     };
 
@@ -89,6 +92,16 @@ class RestaurantController {
         const category = this[MODEL].getCategory(title)
         const dishes = this[MODEL].getDishesInCategory(category, (resource) => resource.getName() === title);
         this[VIEW].listProducts(dishes, category.getName());
+        this[VIEW].bindShowProduct(this.handleShowProduct);
+    };
+
+    handleShowProduct = (dishName) => {
+        try {
+            const dish = this[MODEL].getDish(dishName);
+            this[VIEW].showProducts(dish);
+        } catch (error) {
+            this[VIEW].showProducts(null, 'No existe este producto en la página.');
+        }
     };
 
 }
