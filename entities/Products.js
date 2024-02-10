@@ -230,8 +230,9 @@ class Restaurant {
     #name
     #description
     #location
+    #image
 
-    constructor(name, description = '', location = new Coordinate(0, 0)) {
+    constructor(name, description = '', location = new Coordinate(0, 0), image) {
 
         // Comprobamoes si no se introduce ningun valor, lanzamos excepcion
         if (name === undefined || name === "") throw new EmptyValueException();
@@ -242,6 +243,7 @@ class Restaurant {
         this.#name = name;
         this.#description = description;
         this.#location = location;
+        this.#image = image;
     }
 
     getName() {
@@ -267,6 +269,15 @@ class Restaurant {
     setLocation(newLocation) {
         this.#location = newLocation;
     }
+
+    getImage() {
+        return this.#image;
+    }
+
+    setImage(newImage) {
+        this.#image = newImage;
+    }
+
 
     toString() {
         return `Restaurant: ${this.#name}, Description: ${this.#description}, Location: ${this.#location.toString()}`;

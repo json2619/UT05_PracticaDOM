@@ -74,13 +74,13 @@ class RestaurantView {
         li.classList.add('nav-item');
         li.classList.add('dropdown');
 
-        li.insertAdjacentHTML('beforeend', `<a class="nav-link dropdown-toggle" href="#" id="navCats" role="button" data-bs-toggle="dropdown" aria-expanded="false">Alérgenos</a>`);
+        li.insertAdjacentHTML('beforeend', `<a class="nav-link dropdown-toggle" href="#" id="navCats2" role="button" data-bs-toggle="dropdown" aria-expanded="false">Alérgenos</a>`);
 
         const container = document.createElement('ul');
         container.classList.add('dropdown-menu');
 
         for (const [name, value] of allergens) {
-            container.insertAdjacentHTML('beforeend', `<li><a data-category="${value.getName()}" class="dropdown-item" href="#productlist">${value.getName()}</a></li>`);
+            container.insertAdjacentHTML('beforeend', `<li><a data-allergen="${value.getName()}" class="dropdown-item" href="#productlist">${value.getName()}</a></li>`);
         }
 
         li.append(container);
@@ -93,13 +93,13 @@ class RestaurantView {
         li.classList.add('nav-item');
         li.classList.add('dropdown');
 
-        li.insertAdjacentHTML('beforeend', `<a class="nav-link dropdown-toggle" href="#" id="navCats" role="button" data-bs-toggle="dropdown" aria-expanded="false">Restaurantes</a>`);
+        li.insertAdjacentHTML('beforeend', `<a class="nav-link dropdown-toggle" href="#" id="navCats3" role="button" data-bs-toggle="dropdown" aria-expanded="false">Restaurantes</a>`);
 
         const container = document.createElement('ul');
         container.classList.add('dropdown-menu');
 
         for (const [name, value] of restaurants) {
-            container.insertAdjacentHTML('beforeend', `<li><a data-category="${value.getName()}" class="dropdown-item" href="#productlist">${value.getName()}</a></li>`);
+            container.insertAdjacentHTML('beforeend', `<li><a data-restaurant="${value.getName()}" class="dropdown-item" href="#productlist">${value.getName()}</a></li>`);
         }
 
         li.append(container);
@@ -112,13 +112,13 @@ class RestaurantView {
         li.classList.add('nav-item');
         li.classList.add('dropdown');
 
-        li.insertAdjacentHTML('beforeend', `<a class="nav-link dropdown-toggle" href="#" id="navCats" role="button" data-bs-toggle="dropdown" aria-expanded="false">Menú</a>`);
+        li.insertAdjacentHTML('beforeend', `<a class="nav-link dropdown-toggle" href="#" id="navCats4" role="button" data-bs-toggle="dropdown" aria-expanded="false">Menú</a>`);
 
         const container = document.createElement('ul');
         container.classList.add('dropdown-menu');
 
         for (const [name, value] of menus) {
-            container.insertAdjacentHTML('beforeend', `<li><a data-category="${value.newMenu.getName()}" class="dropdown-item" href="#productlist">${value.newMenu.getName()}</a></li>`);
+            container.insertAdjacentHTML('beforeend', `<li><a data-menu="${value.newMenu.getName()}" class="dropdown-item" href="#productlist">${value.newMenu.getName()}</a></li>`);
         }
 
         li.append(container);
@@ -242,6 +242,36 @@ class RestaurantView {
         this.products.append(container);
     }
 
+    showRestaurant(restaurant) {
+        this.dishes.replaceChildren();
+
+        if (this.dishes.children.length > 1)
+            this.dishes.children[1].remove();
+        const container = document.createElement('div');
+        container.id = 'product-list';
+        container.classList.add('container');
+        container.classList.add('my-3');
+        container.insertAdjacentHTML('beforeend', '<div class="row"> </div>');
+        const div = document.createElement('div');
+        div.classList.add('col-md-4');
+        div.insertAdjacentHTML('beforeend', `<div class="row g-4">
+            <div class="col">
+              <a data-serial="${restaurant.getName()}" href="#singleproduct" class="img-wrap">
+              <div class="card text-bg-dark">
+              <img src="${restaurant.getImage()}" class="card-img" alt="${restaurant.getName()}">
+              <div class="card-img-overlay">
+                <h5 class="card-title">${restaurant.getName()}</h5>
+                <p class="card-text">Description: ${restaurant.getDescription()}</p>
+                <p class="card-text">Location: ${restaurant.getLocation()}</p>
+              </div>
+            </div>
+              </a>
+            </div>
+          </div>`);
+        container.children[0].append(div);
+        this.dishes.append(container);
+    }
+
 
     bindProductsCategoryList(handler) {
         const categoryList = document.getElementById('categories');
@@ -252,12 +282,43 @@ class RestaurantView {
             });
         }
     }
+
     bindProductsCategoryListInMenu(handler) {
         const navCats = document.getElementById('navCats');
         const links = navCats.nextSibling.querySelectorAll('a');
         for (const link of links) {
             link.addEventListener('click', (event) => {
-                handler(event.currentTarget.getAttribute('datacategory'));
+                handler(event.currentTarget.getAttribute('data-category'));
+            });
+        }
+    }
+
+    bindProductsAllergenListInMenu(handler) {
+        const navCats = document.getElementById('navCats2');
+        const links = navCats.nextSibling.querySelectorAll('a');
+        for (const link of links) {
+            link.addEventListener('click', (event) => {
+                handler(event.currentTarget.getAttribute('data-allergen'));
+            });
+        }
+    }
+
+    bindRestaurantListInMenu(handler) {
+        const navCats = document.getElementById('navCats3');
+        const links = navCats.nextSibling.querySelectorAll('a');
+        for (const link of links) {
+            link.addEventListener('click', (event) => {
+                handler(event.currentTarget.getAttribute('data-restaurant'));
+            });
+        }
+    }
+
+    bindProductsMenuList(handler) {
+        const navCats = document.getElementById('navCats4');
+        const links = navCats.nextSibling.querySelectorAll('a');
+        for (const link of links) {
+            link.addEventListener('click', (event) => {
+                handler(event.currentTarget.getAttribute('data-menu'));
             });
         }
     }

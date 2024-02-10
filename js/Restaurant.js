@@ -46,8 +46,16 @@ const RestaurantsManager = (function () {
             return this.#allergens[Symbol.iterator]();
         }
 
+        getAllergen(title) {
+            return this.#allergens.get(title);
+        }
+
         getRestaurants() {
             return this.#restaurants[Symbol.iterator]();
+        }
+
+        getRestaurant(title) {
+            return this.#restaurants.get(title);
         }
 
         getDishes() {
@@ -56,6 +64,10 @@ const RestaurantsManager = (function () {
 
         getDish(title) {
             return this.#dishes.get(title).newDish;
+        }
+
+        getDishesInMenu(title) {
+            return this.#menus.get(title).dishMenuArr;
         }
 
         addCategory(category) {
@@ -412,7 +424,7 @@ const RestaurantsManager = (function () {
             return filteredDishes[Symbol.iterator]();
         }
 
-        getDishesWithAllergen(allergen, order = null) {
+        getDishesWithAllergen(allergen, criteria) {
             if (!allergen) {
                 throw new EmptyValueException();
             }
@@ -424,8 +436,10 @@ const RestaurantsManager = (function () {
             const filteredDishes = [];
 
             for (const [name, value] of this.#dishes) {
-                if (value.dishAllergens.some(alg => alg.getName() === allergen.getName())) {
-                    filteredDishes.push(value.newDish);
+                for (const allergen of value.dishAllergens) {
+                    if (criteria(allergen)) {
+                        filteredDishes.push(value.newDish);
+                    }
                 }
             }
 
@@ -508,14 +522,14 @@ const RestaurantsManager = (function () {
         }
 
         // Metodo que crea un restaurante y devuelve un objeto restaurant
-        createRestaurant(name, description, location) {
+        createRestaurant(name, description, location, image) {
             // Variable restaurant que vamos a devolver
             let restaurant;
 
             if (this.#restaurants.has(name)) {
                 restaurant = this.#restaurants.get(name).restaurant;
             } else {
-                restaurant = new Restaurant(name, description, location);
+                restaurant = new Restaurant(name, description, location, image);
             }
 
             // Devolvemos el restaurante
