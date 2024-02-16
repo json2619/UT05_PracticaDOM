@@ -1,3 +1,5 @@
+const EXCECUTE_HANDLER = Symbol('excecuteHandler');
+
 class RestaurantView {
     constructor() {
         this.categories = document.getElementById('categories');
@@ -5,6 +7,14 @@ class RestaurantView {
         this.nav = document.getElementById('principal');
         this.products = document.getElementById('products');
         this.productWindow = null;
+    }
+
+    [EXCECUTE_HANDLER](handler, handlerArguments, scrollElement, data, url, event) {
+        handler(...handlerArguments);
+        const scroll = document.querySelector(scrollElement);
+        if (scroll) scroll.scrollIntoView();
+        history.pushState(data, null, url);
+        event.preventDefault();
     }
 
     bindInit(handler) {
@@ -18,7 +28,6 @@ class RestaurantView {
 
     showCategories(categories) {
         this.categories.replaceChildren();
-
         let imageUrls = {
             'Entrantes': 'img/categorias/entrada.jpg',
             'Sopas': 'img/categorias/sopa.jpg',
@@ -226,7 +235,7 @@ class RestaurantView {
                 <h6 class="text-uppercase">Características</h6>
                 </div>
                 <div class="cart mt-4 align-items-center"> <button dataserial="${dish.getName()}" class="btn btn-primary text-uppercase mr-2 px4">Comprar</button> 
-                <button dataserial="${dish.getName()}" class="btn btn-primary text-uppercase mr-2 px4">Abrir en nueva ventana</button>
+                <button id="b-open" data-serial="${dish.getName()}" class="btn btnprimary text-uppercase mr-2 px-4">Abrir en nueva ventana</button>
                 </div>
                 </div>
                 </div>
@@ -273,6 +282,67 @@ class RestaurantView {
           </div>`);
         container.children[0].append(div);
         this.dishes.append(container);
+    }
+
+    showProductInNewWindow(dish, message) {
+        const main = this.productWindow.document.querySelector('main');
+        const header = this.productWindow.document.querySelector('header nav');
+        main.replaceChildren();
+        header.replaceChildren();
+        let container;
+        if (dish) {
+            this.productWindow.document.title = `${dish.getSerial()} -
+        ${dish.getName()}`;
+            header.insertAdjacentHTML('beforeend', `<h1 dataserial="${dish.getSerial()}" class="display-5">${dish.getSerial()} -
+        ${dish.getName()}</h1>`);
+            container = document.createElement('div');
+            container.id = 'single-product';
+            container.classList.add('container');
+            container.classList.add('mt-5');
+            container.classList.add('mb-5');
+            container.insertAdjacentHTML('beforeend', `<div class="row d-flex
+        justify-content-center">
+        <div class="col-md-10">
+        <div class="card">
+        <div class="row">
+        <div class="col-md-12">
+        <div class="images p-3">
+        <div class="text-center p-4"> <img id="main-image"
+        src="${dish.getImage()}"/> </div>
+        </div>
+        </div>
+        <div class="col-md-12">
+        <div class="product p-4">
+        <div class="mt-4 mb-3">
+        <h5 class="text-uppercase">${dish.getName()}</h5>
+        <div class="price d-flex flex-row align-itemscenter">
+        <span class="actprice">${dish.getPrice()}</span>
+        </div>
+        </div>
+        <p class="about">${dish.getDescription()}</p>
+<div class="sizes mt-5">
+<h6 class="text-uppercase">Características</h6>
+</div>
+<div class="cart mt-4 align-items-center"> <button
+data-serial="${dish.getName()}" class="btn btn-primary text-uppercase mr2 px-4">Comprar</button> </div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>`);
+            container.insertAdjacentHTML('beforeend', '<button class="btn btnprimary text-uppercase m-2 px-4" onClick="window.close()">Cerrar</button>');
+            main.append(container);
+        } else {
+            container = document.createElement('div');
+            container.classList.add('container');
+            container.classList.add('mt-5');
+            container.classList.add('mb-5');
+            container.insertAdjacentHTML('beforeend', `<div class="row d-flex
+justify-content-center">${message}</div>`);
+        }
+        main.append(container);
+        this.productWindow.document.body.scrollIntoView();
     }
 
 
@@ -335,6 +405,24 @@ class RestaurantView {
             });
         }
     }
+
+    bindShowProductInNewWindow(handler) {
+        const bOpen = document.getElementById('b-open');
+        console.log(bOpen);
+        bOpen.addEventListener('click', (event) => {
+            if (!this.productWindow || this.productWindow.closed) {
+                this.productWindow = window.open('Dishes.html', 'ProductWindow',
+                    'width=800, height=600, top=250, left=250, titlebar=yes, toolbar=no, menubar = no, location = no');
+                this.productWindow.addEventListener('DOMContentLoaded', () => {
+                    handler(event.target.getAttribute('data-serial'));
+                });
+            } else {
+                handler(event.target.getAttribute('data-serial'));
+                this.productWindow.focus();
+            }
+        });
+    }
+
 
 }
 export default RestaurantView;

@@ -11,8 +11,10 @@ class RestaurantController {
     constructor(model, view) {
         this[MODEL] = model;
         this[VIEW] = view;
+
         this.onLoad();
         this.onInit();
+
         this[VIEW].bindInit(this.handleInit);
     }
 
@@ -74,18 +76,14 @@ class RestaurantController {
         this[VIEW].showCategories(this[MODEL].getCategories());
         this[VIEW].showDishes(this[MODEL].getDishes());
         this.onAddCategory();
-    };
-
-    onInit = () => {
         this[VIEW].bindProductsCategoryListInMenu(this.handledishesCategoryList)
         this[VIEW].bindProductsCategoryList(this.handledishesCategoryList);
         this[VIEW].bindProductsAllergenListInMenu(this.handledishesAllergenList);
         this[VIEW].bindProductsMenuList(this.handledishesMenuList);
-        this[VIEW].bindRestaurantListInMenu(this.handleRestaurantList);
-    }
+    };
 
-    handleInit = () => {
-        this.onInit();
+    onInit = () => {
+        this[VIEW].bindRestaurantListInMenu(this.handleRestaurantList);
     }
 
     onAddCategory = () => {
@@ -94,6 +92,10 @@ class RestaurantController {
         this[VIEW].showMenuRestaurants(this[MODEL].getRestaurants());
         this[VIEW].showMenu(this[MODEL].getMenus());
     };
+
+    handleInit = () => {
+        this.onInit();
+    }
 
     handledishesCategoryList = (title) => {
         const category = this[MODEL].getCategory(title)
@@ -122,8 +124,18 @@ class RestaurantController {
         try {
             const dish = this[MODEL].getDish(dishName);
             this[VIEW].showProducts(dish);
+            this[VIEW].bindShowProductInNewWindow(this.handleShowProductInNewWindow);
         } catch (error) {
             this[VIEW].showProducts(null, 'No existe este producto en la página.');
+        }
+    };
+
+    handleShowProductInNewWindow = (dishName) => {
+        try {
+            const dish = this[MODEL].getDish(dishName);
+            this[VIEW].showProductInNewWindow(dish);
+        } catch (error) {
+            this[VIEW].showProductInNewWindow(null, 'No existe este producto en la página.');
         }
     };
 
