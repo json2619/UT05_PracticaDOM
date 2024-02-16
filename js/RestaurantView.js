@@ -4,6 +4,7 @@ class RestaurantView {
         this.dishes = document.getElementById('dishes');
         this.nav = document.getElementById('principal');
         this.products = document.getElementById('products');
+        this.productWindow = null;
     }
 
     bindInit(handler) {
@@ -224,7 +225,9 @@ class RestaurantView {
                 <div class="sizes mt-5">
                 <h6 class="text-uppercase">Características</h6>
                 </div>
-                <div class="cart mt-4 align-items-center"> <button dataserial="${dish.getName()}" class="btn btn-primary text-uppercase mr-2 px4">Comprar</button> </div>
+                <div class="cart mt-4 align-items-center"> <button dataserial="${dish.getName()}" class="btn btn-primary text-uppercase mr-2 px4">Comprar</button> 
+                <button dataserial="${dish.getName()}" class="btn btn-primary text-uppercase mr-2 px4">Abrir en nueva ventana</button>
+                </div>
                 </div>
                 </div>
                 </div>
