@@ -352,7 +352,7 @@ justify-content-center">${message}</div>`);
         this.openedWindows.forEach(window => {
             window.close();
         });
-        this.openedWindows = []; // Limpiar el array de ventanas abiertas
+        this.openedWindows = [];
     }
 
     bindProductsCategoryList(handler) {
