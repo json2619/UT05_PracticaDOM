@@ -16,6 +16,7 @@ class RestaurantController {
         this.onInit();
 
         this[VIEW].bindInit(this.handleInit);
+        this[VIEW].bindMenuEvents();
     }
 
     [LOAD_RESTAURANT_OBJECT]() {

@@ -7,6 +7,7 @@ class RestaurantView {
         this.nav = document.getElementById('principal');
         this.products = document.getElementById('products');
         this.productWindow = null;
+        this.openedWindows = [];
     }
 
     [EXCECUTE_HANDLER](handler, handlerArguments, scrollElement, data, url, event) {
@@ -19,11 +20,13 @@ class RestaurantView {
 
     bindInit(handler) {
         document.getElementById('init').addEventListener('click', (event) => {
-            handler();
+            this[EXCECUTE_HANDLER](handler, [], 'body', { action: 'init' }, '#',
+                event);
         });
         document.getElementById('logo').addEventListener('click', (event) => {
-            handler();
-        })
+            this[EXCECUTE_HANDLER](handler, [], 'body', { action: 'init' }, '#',
+                event);
+        });
     }
 
     showCategories(categories) {
@@ -345,13 +348,27 @@ justify-content-center">${message}</div>`);
         this.productWindow.document.body.scrollIntoView();
     }
 
+    closeAllWindows() {
+        this.openedWindows.forEach(window => {
+            window.close();
+        });
+        this.openedWindows = []; // Limpiar el array de ventanas abiertas
+    }
 
     bindProductsCategoryList(handler) {
         const categoryList = document.getElementById('categories');
         const links = categoryList.querySelectorAll('a');
         for (const link of links) {
             link.addEventListener('click', (event) => {
-                handler(event.currentTarget.getAttribute('data-type'));
+                const { category } = event.currentTarget.getAttribute('data-type');
+                this[EXCECUTE_HANDLER](
+                    handler(event.currentTarget.getAttribute('data-type')),
+                    [category],
+                    '#product-list',
+                    { action: 'productsCategoryList', category },
+                    '#category-list',
+                    event,
+                );
             });
         }
     }
@@ -361,7 +378,15 @@ justify-content-center">${message}</div>`);
         const links = navCats.nextSibling.querySelectorAll('a');
         for (const link of links) {
             link.addEventListener('click', (event) => {
-                handler(event.currentTarget.getAttribute('data-category'));
+                const { category } = event.currentTarget.getAttribute('data-category');
+                this[EXCECUTE_HANDLER](
+                    handler(event.currentTarget.getAttribute('data-category')),
+                    [category],
+                    '#product-list',
+                    { action: 'productsCategoryList', category },
+                    '#category-list',
+                    event,
+                );
             });
         }
     }
@@ -371,7 +396,15 @@ justify-content-center">${message}</div>`);
         const links = navCats.nextSibling.querySelectorAll('a');
         for (const link of links) {
             link.addEventListener('click', (event) => {
-                handler(event.currentTarget.getAttribute('data-allergen'));
+                const { category } = event.currentTarget.getAttribute('data-allergen');
+                this[EXCECUTE_HANDLER](
+                    handler(event.currentTarget.getAttribute('data-allergen')),
+                    [category],
+                    '#product-list',
+                    { action: 'productsAllergenList', category },
+                    '#category-list',
+                    event,
+                );
             });
         }
     }
@@ -381,7 +414,15 @@ justify-content-center">${message}</div>`);
         const links = navCats.nextSibling.querySelectorAll('a');
         for (const link of links) {
             link.addEventListener('click', (event) => {
-                handler(event.currentTarget.getAttribute('data-restaurant'));
+                const { category } = event.currentTarget.getAttribute('data-restaurant');
+                this[EXCECUTE_HANDLER](
+                    handler(event.currentTarget.getAttribute('data-restaurant')),
+                    [category],
+                    '#product-list',
+                    { action: 'productsRestaurantList', category },
+                    '#category-list',
+                    event,
+                );
             });
         }
     }
@@ -391,7 +432,15 @@ justify-content-center">${message}</div>`);
         const links = navCats.nextSibling.querySelectorAll('a');
         for (const link of links) {
             link.addEventListener('click', (event) => {
-                handler(event.currentTarget.getAttribute('data-menu'));
+                const { category } = event.currentTarget.getAttribute('data-menu');
+                this[EXCECUTE_HANDLER](
+                    handler(event.currentTarget.getAttribute('data-menu')),
+                    [category],
+                    '#product-list',
+                    { action: 'productsMenuList', category },
+                    '#category-list',
+                    event,
+                );
             });
         }
     }
@@ -401,18 +450,26 @@ justify-content-center">${message}</div>`);
         const links = productList.querySelectorAll('a');
         for (const link of links) {
             link.addEventListener('click', (event) => {
-                handler(event.currentTarget.getAttribute('data-serial'));
+                const { category } = event.currentTarget.getAttribute('data-serial');
+                this[EXCECUTE_HANDLER](
+                    handler(event.currentTarget.getAttribute('data-serial')),
+                    [category],
+                    '#product-list',
+                    { action: 'showProducts', category },
+                    '#category-list',
+                    event,
+                );
             });
         }
     }
 
     bindShowProductInNewWindow(handler) {
         const bOpen = document.getElementById('b-open');
-        console.log(bOpen);
         bOpen.addEventListener('click', (event) => {
             if (!this.productWindow || this.productWindow.closed) {
                 this.productWindow = window.open('Dishes.html', 'ProductWindow',
                     'width=800, height=600, top=250, left=250, titlebar=yes, toolbar=no, menubar = no, location = no');
+                this.openedWindows.push(this.productWindow);
                 this.productWindow.addEventListener('DOMContentLoaded', () => {
                     handler(event.target.getAttribute('data-serial'));
                 });
@@ -423,6 +480,11 @@ justify-content-center">${message}</div>`);
         });
     }
 
+    bindMenuEvents() {
+        document.getElementById('close-all-windows').addEventListener('click', () => {
+            this.closeAllWindows();
+        });
+    }
 
 }
 export default RestaurantView;
