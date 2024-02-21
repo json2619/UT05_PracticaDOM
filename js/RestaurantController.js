@@ -109,11 +109,13 @@ class RestaurantController {
         const allergen = this[MODEL].getAllergen(title)
         const dishes = this[MODEL].getDishesWithAllergen(allergen, (resource) => resource.getName() === title);
         this[VIEW].listProducts(dishes, allergen.getName());
+        this[VIEW].bindShowProduct(this.handleShowProduct);
     }
 
     handledishesMenuList = (title) => {
         const dishes = this[MODEL].getDishesInMenu(title)
         this[VIEW].listProducts(dishes, title);
+        this[VIEW].bindShowProduct(this.handleShowProduct);
     };
 
     handleRestaurantList = (title) => {
