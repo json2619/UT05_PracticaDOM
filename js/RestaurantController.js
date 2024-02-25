@@ -74,17 +74,17 @@ class RestaurantController {
 
     onLoad = () => {
         this[LOAD_RESTAURANT_OBJECT]();
+        this.onAddCategory();
+    };
+
+    onInit = () => {
         this[VIEW].showCategories(this[MODEL].getCategories());
         this[VIEW].showDishes(this[MODEL].getDishes());
-        this.onAddCategory();
+        this[VIEW].bindRestaurantListInMenu(this.handleRestaurantList);
         this[VIEW].bindProductsCategoryListInMenu(this.handledishesCategoryList)
         this[VIEW].bindProductsCategoryList(this.handledishesCategoryList);
         this[VIEW].bindProductsAllergenListInMenu(this.handledishesAllergenList);
         this[VIEW].bindProductsMenuList(this.handledishesMenuList);
-    };
-
-    onInit = () => {
-        this[VIEW].bindRestaurantListInMenu(this.handleRestaurantList);
     }
 
     onAddCategory = () => {
