@@ -138,6 +138,22 @@ class RestaurantView {
         this.nav.append(li);
     }
 
+    showAdminMenu() {
+        const menuOption = document.createElement('li');
+        menuOption.classList.add('menu_nav');
+        menuOption.classList.add('nav-item');
+        menuOption.classList.add('dropdown');
+        menuOption.insertAdjacentHTML(
+            'beforeend',
+            '`<a class="nav-link dropdown-toggle" href="#" id="navServices" role="button" data-bs-toggle="dropdown" aria-expanded="false">Adminitración</a>`');
+        const suboptions = document.createElement('ul');
+        suboptions.classList.add('dropdown-menu');
+        suboptions.insertAdjacentHTML('beforeend', '<li><a id="lnewdish" class= "dropdown-item" href = "#new-dish" > Crear plato</a ></li > ');
+        suboptions.insertAdjacentHTML('beforeend', '<li><a id="ldeldish"class= "dropdown-item" href = "#del-dish" > Eliminar plato</a ></li > ');
+        menuOption.append(suboptions);
+        this.nav.append(menuOption);
+    }
+
 
     showDishes(dishes) {
 
@@ -203,7 +219,6 @@ class RestaurantView {
     }
 
     showProducts(dish, message) {
-
         this.products.replaceChildren();
         if (this.products.children.length > 1)
             this.products.children[1].remove();
@@ -355,6 +370,100 @@ justify-content-center">${message}</div>`);
         this.openedWindows = [];
     }
 
+    showNewDishForm() {
+        this.categories.replaceChildren();
+        if (this.categories.children.length > 1)
+            this.categories.children[1].remove();
+        const container = document.createElement('div');
+        container.classList.add('container');
+        container.classList.add('my-3');
+        container.id = 'new-dish';
+        container.insertAdjacentHTML(
+            'afterbegin',
+            '<h1 class="display-5">Nuevo Plato</h1>',
+        );
+        container.insertAdjacentHTML(
+            'beforeend',
+            `<form name="fNewDish" role="form" class="row g-3" novalidate>
+
+        <div class="col-md-6 mb-3">
+        <label class="form-label" for="ndSerial">Serial del plato*</label>
+        <div class="input-group">
+        <span class="input-group-text"><i class="bi bi-type"></i></span>
+        <input type="text" class="form-control" id="ndSerial"
+        name="ndSerial"
+        placeholder="serial del plato" value="" required>
+        <div class="invalid-feedback">El serial es obligatorio.</div>
+        <div class="valid-feedback">Correcto.</div>
+        </div>
+        </div>
+
+        <div class="col-md-6 mb-3">
+        <label class="form-label" for="ncTitle">Nombre del Plato*</label>
+        <div class="input-group">
+        <span class="input-group-text"><i class="bi bi-type"></i></span>
+        <input type="text" class="form-control" id="ncTitle"
+        name="ncTitle"
+        placeholder="nombre del plato" value="" required>
+        <div class="invalid-feedback">El nombre es obligatorio.</div>
+        <div class="valid-feedback">Correcto.</div>
+        </div>
+        </div>
+
+        <div class="col-md-6 mb-3">
+        <label class="form-label" for="ncUrl">URL de la imagen *</label>
+        <div class="input-group">
+        <span class="input-group-text"><i class="bi bi-fileimage"></i></span>
+        <input type="url" class="form-control" id="ncUrl" name="ncUrl"
+        placeholder="URL de la imagen"
+        value="" required>
+        <div class="invalid-feedback">La URL no es válida.</div>
+        <div class="valid-feedback">Correcto.</div>
+        </div>
+        </div>
+
+        <div class="col-md-12 mb-3">
+        <label class="form-label" for="ncDescription">Descripción del plato*</label>
+        <div class="input-group">
+        <span class="input-group-text"><i class="bi bi-bodytext"></i></span>
+        <input type="text" class="form-control" id="ncDescription"
+        name="ncDescription" value="">
+        <div class="invalid-feedback"></div>
+        <div class="valid-feedback">Correcto.</div>
+        </div>
+        </div>
+
+        <div class="col-md-12 mb-3">
+        <label class="form-label" for="ncIngredients">Ingredientes*</label>
+        <div class="input-group">
+        <span class="input-group-text"><i class="bi bi-bodytext"></i></span>
+        <input type="text" class="form-control" id="ncIngredients"
+        name="ncIngredients" value="ingrediente1, ingrediente2">
+        <div class="invalid-feedback"></div>
+        <div class="valid-feedback">Correcto.</div>
+        </div>
+        </div>
+
+        <div class="col-md-12 mb-3">
+        <label class="form-label" for="ncPrice">Precio*</label>
+        <div class="input-group">
+        <span class="input-group-text"><i class="bi bi-bodytext"></i></span>
+        <input type="text" class="form-control" id="ncPrice"
+        name="ncPrice" value="introduzca el precio">
+        <div class="invalid-feedback"></div>
+        <div class="valid-feedback">Correcto.</div>
+        </div>
+        </div>
+        
+        <div class="mb-12">
+        <button class="btn btn-primary" type="submit">Enviar</button>
+        <button class="btn btn-primary" type="reset">Cancelar</button>
+        </div>
+        </form>`,
+        );
+        this.categories.append(container);
+    }
+
     bindProductsCategoryList(handler) {
         const categoryList = document.getElementById('categories');
         const links = categoryList.querySelectorAll('a');
@@ -483,6 +592,16 @@ justify-content-center">${message}</div>`);
     bindMenuEvents() {
         document.getElementById('close-all-windows').addEventListener('click', () => {
             this.closeAllWindows();
+        });
+    }
+
+    bindAdminMenu(hNewDish) {
+        const newCategoryLink = document.getElementById('lnewdish');
+        newCategoryLink.addEventListener('click', (event) => {
+            this[EXCECUTE_HANDLER](hNewDish, [], '#new-dish', {
+                action:
+                    'newDish'
+            }, '#', event);
         });
     }
 

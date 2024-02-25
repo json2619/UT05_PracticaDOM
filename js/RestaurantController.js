@@ -75,6 +75,9 @@ class RestaurantController {
     onLoad = () => {
         this[LOAD_RESTAURANT_OBJECT]();
         this.onAddCategory();
+        this[VIEW].showAdminMenu();
+        this[VIEW].bindAdminMenu(this.handleNewDishForm);
+
     };
 
     onInit = () => {
@@ -140,6 +143,10 @@ class RestaurantController {
         } catch (error) {
             this[VIEW].showProductInNewWindow(null, 'No existe este producto en la página.');
         }
+    };
+
+    handleNewDishForm = () => {
+        this[VIEW].showNewDishForm();
     };
 
 }
