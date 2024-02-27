@@ -76,13 +76,15 @@ class RestaurantController {
         this[LOAD_RESTAURANT_OBJECT]();
         this.onAddCategory();
         this[VIEW].showAdminMenu();
-        this[VIEW].bindAdminMenu(this.handleNewDishForm);
+        this[VIEW].bindAdminMenu(this.handleNewDishForm, this.handleRemoveDishForm);
 
     };
 
     onInit = () => {
-        this[VIEW].showCategories(this[MODEL].getCategories());
         this[VIEW].showDishes(this[MODEL].getDishes());
+        this[VIEW].showMenuAllergens(this[MODEL].getAllergens());
+        this[VIEW].showMenuRestaurants(this[MODEL].getRestaurants());
+        this[VIEW].showMenu(this[MODEL].getMenus());
         this[VIEW].bindRestaurantListInMenu(this.handleRestaurantList);
         this[VIEW].bindProductsCategoryListInMenu(this.handledishesCategoryList)
         this[VIEW].bindProductsCategoryList(this.handledishesCategoryList);
@@ -91,10 +93,8 @@ class RestaurantController {
     }
 
     onAddCategory = () => {
+        this[VIEW].showCategories(this[MODEL].getCategories());
         this[VIEW].showMenuCategories(this[MODEL].getCategories());
-        this[VIEW].showMenuAllergens(this[MODEL].getAllergens());
-        this[VIEW].showMenuRestaurants(this[MODEL].getRestaurants());
-        this[VIEW].showMenu(this[MODEL].getMenus());
     };
 
     handleInit = () => {
@@ -147,6 +147,42 @@ class RestaurantController {
 
     handleNewDishForm = () => {
         this[VIEW].showNewDishForm();
+        this[VIEW].bindNewDishForm(this.handleCreateDish);
+    };
+
+    handleCreateDish = (serial, name, description, ingredients, image, price) => {
+        const dish = this[MODEL].createDish(serial, name, description, ingredients, image, price);
+        let done; let
+            error;
+        try {
+            this[MODEL].addDish(dish);
+            done = true;
+            console.log("El objeto creado es: " + dish);
+        } catch (exception) {
+            done = false;
+            error = exception;
+            console.log("no se ha podido crear");
+        }
+    };
+
+    handleRemoveDishForm = () => {
+        this[VIEW].showRemoveDishForm(this[MODEL].getDishes());
+        this[VIEW].bindRemoveDishForm(this.handleRemoveDish);
+    };
+
+    handleRemoveDish = (title) => {
+        let done; let error; let
+            dish;
+        try {
+            dish = this[MODEL].getDish(title);
+            this[MODEL].removeDish(dish);
+            done = true;
+            this.handleRemoveDishForm();
+            this.onAddCategory();
+        } catch (exception) {
+            done = false;
+            error = exception;
+        }
     };
 
 }
