@@ -1,4 +1,4 @@
-import { newDishValidation } from './validation.js';
+import { newDishValidation, gestMenuValidation } from './validation.js';
 const EXCECUTE_HANDLER = Symbol('excecuteHandler');
 
 class RestaurantView {
@@ -88,76 +88,93 @@ class RestaurantView {
     }
 
     showMenuAllergens(allergens) {
-        const li = document.createElement('li');
-        li.classList.add('menu_nav');
-        li.classList.add('nav-item');
-        li.classList.add('dropdown');
+        let existingDropdown = document.getElementById('navCats2');
 
-        li.insertAdjacentHTML('beforeend', `<a class="nav-link dropdown-toggle" href="#" id="navCats2" role="button" data-bs-toggle="dropdown" aria-expanded="false">Alérgenos</a>`);
+        if (!existingDropdown) {
+            const li = document.createElement('li');
+            li.classList.add('menu_nav');
+            li.classList.add('nav-item');
+            li.classList.add('dropdown');
 
-        const container = document.createElement('ul');
-        container.classList.add('dropdown-menu');
+            li.insertAdjacentHTML('beforeend', `<a class="nav-link dropdown-toggle" href="#" id="navCats2" role="button" data-bs-toggle="dropdown" aria-expanded="false">Alérgenos</a>`);
 
-        for (const [name, value] of allergens) {
-            container.insertAdjacentHTML('beforeend', `<li><a data-allergen="${value.getName()}" class="dropdown-item" href="#productlist">${value.getName()}</a></li>`);
+            const container = document.createElement('ul');
+            container.classList.add('dropdown-menu');
+
+            for (const [name, value] of allergens) {
+                container.insertAdjacentHTML('beforeend', `<li><a data-allergen="${value.getName()}" class="dropdown-item" href="#productlist">${value.getName()}</a></li>`);
+            }
+
+            li.append(container);
+            this.nav.append(li);
         }
-
-        li.append(container);
-        this.nav.append(li);
     }
 
     showMenuRestaurants(restaurants) {
-        const li = document.createElement('li');
-        li.classList.add('menu_nav');
-        li.classList.add('nav-item');
-        li.classList.add('dropdown');
+        let existingDropdown = document.getElementById('navCats3');
 
-        li.insertAdjacentHTML('beforeend', `<a class="nav-link dropdown-toggle" href="#" id="navCats3" role="button" data-bs-toggle="dropdown" aria-expanded="false">Restaurantes</a>`);
+        if (!existingDropdown) {
+            const li = document.createElement('li');
+            li.classList.add('menu_nav');
+            li.classList.add('nav-item');
+            li.classList.add('dropdown');
 
-        const container = document.createElement('ul');
-        container.classList.add('dropdown-menu');
+            li.insertAdjacentHTML('beforeend', `<a class="nav-link dropdown-toggle" href="#" id="navCats3" role="button" data-bs-toggle="dropdown" aria-expanded="false">Restaurantes</a>`);
 
-        for (const [name, value] of restaurants) {
-            container.insertAdjacentHTML('beforeend', `<li><a data-restaurant="${value.getName()}" class="dropdown-item" href="#productlist">${value.getName()}</a></li>`);
+            const container = document.createElement('ul');
+            container.classList.add('dropdown-menu');
+
+            for (const [name, value] of restaurants) {
+                container.insertAdjacentHTML('beforeend', `<li><a data-restaurant="${value.getName()}" class="dropdown-item" href="#productlist">${value.getName()}</a></li>`);
+            }
+
+            li.append(container);
+            this.nav.append(li);
         }
-
-        li.append(container);
-        this.nav.append(li);
     }
 
     showMenu(menus) {
-        const li = document.createElement('li');
-        li.classList.add('menu_nav');
-        li.classList.add('nav-item');
-        li.classList.add('dropdown');
+        let existingDropdown = document.getElementById('navCats4');
 
-        li.insertAdjacentHTML('beforeend', `<a class="nav-link dropdown-toggle" href="#" id="navCats4" role="button" data-bs-toggle="dropdown" aria-expanded="false">Menú</a>`);
+        if (!existingDropdown) {
+            const li = document.createElement('li');
+            li.classList.add('menu_nav');
+            li.classList.add('nav-item');
+            li.classList.add('dropdown');
 
-        const container = document.createElement('ul');
-        container.classList.add('dropdown-menu');
+            li.insertAdjacentHTML('beforeend', `<a class="nav-link dropdown-toggle" href="#" id="navCats4" role="button" data-bs-toggle="dropdown" aria-expanded="false">Menú</a>`);
 
-        for (const [name, value] of menus) {
-            container.insertAdjacentHTML('beforeend', `<li><a data-menu="${value.newMenu.getName()}" class="dropdown-item" href="#productlist">${value.newMenu.getName()}</a></li>`);
+            const container = document.createElement('ul');
+            container.classList.add('dropdown-menu');
+
+            for (const [name, value] of menus) {
+                container.insertAdjacentHTML('beforeend', `<li><a data-menu="${value.newMenu.getName()}" class="dropdown-item" href="#productlist">${value.newMenu.getName()}</a></li>`);
+            }
+
+            li.append(container);
+            this.nav.append(li);
         }
-
-        li.append(container);
-        this.nav.append(li);
     }
 
     showAdminMenu() {
-        const menuOption = document.createElement('li');
-        menuOption.classList.add('menu_nav');
-        menuOption.classList.add('nav-item');
-        menuOption.classList.add('dropdown');
-        menuOption.insertAdjacentHTML(
-            'beforeend',
-            `<a class="nav-link dropdown-toggle" href="#" id="navServices" role="button" data-bs-toggle="dropdown" aria-expanded="false">Adminitración</a>`);
-        const suboptions = document.createElement('ul');
-        suboptions.classList.add('dropdown-menu');
-        suboptions.insertAdjacentHTML('beforeend', '<li><a id="lnewdish" class= "dropdown-item" href = "#new-dish" > Crear plato</a ></li > ');
-        suboptions.insertAdjacentHTML('beforeend', '<li><a id="ldeldish"class= "dropdown-item" href = "#del-dish" > Eliminar plato</a ></li > ');
-        menuOption.append(suboptions);
-        this.nav.append(menuOption);
+        let existingDropdown = document.getElementById('navServices');
+
+        if (!existingDropdown) {
+            const menuOption = document.createElement('li');
+            menuOption.classList.add('menu_nav');
+            menuOption.classList.add('nav-item');
+            menuOption.classList.add('dropdown');
+            menuOption.insertAdjacentHTML(
+                'beforeend',
+                `<a class="nav-link dropdown-toggle" href="#" id="navServices" role="button" data-bs-toggle="dropdown" aria-expanded="false">Adminitración</a>`);
+            const suboptions = document.createElement('ul');
+            suboptions.classList.add('dropdown-menu');
+            suboptions.insertAdjacentHTML('beforeend', '<li><a id="lnewdish" class= "dropdown-item" href = "#new-dish" > Crear plato</a ></li > ');
+            suboptions.insertAdjacentHTML('beforeend', '<li><a id="ldeldish" class= "dropdown-item" href = "#del-dish" > Eliminar plato</a ></li > ');
+            suboptions.insertAdjacentHTML('beforeend', '<li><a id="lgestmenu" class= "dropdown-item" href = "#gest-menu" >Gestión Menú</a ></li > ');
+            menuOption.append(suboptions);
+            this.nav.append(menuOption);
+        }
     }
 
 
@@ -376,36 +393,35 @@ justify-content-center">${message}</div>`);
         this.openedWindows = [];
     }
 
-    showNewDishForm() {
+    showNewDishForm(categories, allergens) {
         this.categories.replaceChildren();
-        if (this.categories.children.length > 1)
-            this.categories.children[1].remove();
+        if (this.categories.children.length > 1) this.categories.children[1].remove();
         const container = document.createElement('div');
         container.classList.add('container');
         container.classList.add('my-3');
-        container.id = 'new-dish';
+        container.id = 'gestDish-Form';
         container.insertAdjacentHTML(
             'afterbegin',
-            '<h1 class="display-5">Nuevo Plato</h1>',
+            '<h1 class="display-5 text-white">Crear plato</h1>',
         );
         container.insertAdjacentHTML(
             'beforeend',
             `<form name="fNewDish" role="form" class="row g-3" novalidate>
 
         <div class="col-md-6 mb-3">
-        <label class="form-label" for="ndSerial">Serial del plato*</label>
+        <label class="form-label text-white" for="ndSerial">Serial del plato*</label>
         <div class="input-group">
         <span class="input-group-text"><i class="bi bi-type"></i></span>
         <input type="text" class="form-control" id="ndSerial"
         name="ndSerial"
-        placeholder="serial del plato" value="" pattern="[A-Za-z0-9]+" required>
+        placeholder="Serial del plato" value="" required>
         <div class="invalid-feedback">Debe contener al menos un carácter alfanumérico.</div>
         <div class="valid-feedback">Correcto.</div>
         </div>
         </div>
 
         <div class="col-md-6 mb-3">
-        <label class="form-label" for="ndTitle">Nombre del Plato*</label>
+        <label class="form-label text-white" for="ndTitle">Nombre del Plato*</label>
         <div class="input-group">
         <span class="input-group-text"><i class="bi bi-type"></i></span>
         <input type="text" class="form-control" id="ndTitle"
@@ -417,7 +433,7 @@ justify-content-center">${message}</div>`);
         </div>
 
         <div class="col-md-12 mb-3">
-        <label class="form-label" for="ndDescription">Descripción del plato*</label>
+        <label class="form-label text-white" for="ndDescription">Descripción del plato*</label>
         <div class="input-group">
         <span class="input-group-text"><i class="bi bi-bodytext"></i></span>
         <input type="text" class="form-control" id="ndDescription"
@@ -428,7 +444,7 @@ justify-content-center">${message}</div>`);
         </div>
 
         <div class="col-md-12 mb-3">
-        <label class="form-label" for="ndIngredients">Ingredientes*</label>
+        <label class="form-label text-white" for="ndIngredients">Ingredientes*</label>
         <div class="input-group">
         <span class="input-group-text"><i class="bi bi-bodytext"></i></span>
         <input type="text" class="form-control" id="ndIngredients"
@@ -439,7 +455,7 @@ justify-content-center">${message}</div>`);
         </div>
 
         <div class="col-md-6 mb-3">
-        <label class="form-label" for="ndUrl">URL de la imagen *</label>
+        <label class="form-label text-white" for="ndUrl">URL de la imagen *</label>
         <div class="input-group">
         <span class="input-group-text"><i class="bi bi-fileimage"></i></span>
         <input type="url" class="form-control" id="ndUrl" name="ndUrl"
@@ -451,7 +467,7 @@ justify-content-center">${message}</div>`);
         </div>
 
         <div class="col-md-12 mb-3">
-        <label class="form-label" for="ndPrice">Precio*</label>
+        <label class="form-label text-white" for="ndPrice">Precio*</label>
         <div class="input-group">
         <span class="input-group-text"><i class="bi bi-bodytext"></i></span>
         <input type="text" class="form-control" id="ndPrice"
@@ -460,7 +476,6 @@ justify-content-center">${message}</div>`);
         <div class="valid-feedback">Correcto.</div>
         </div>
         </div>
-        
         <div class="mb-12">
         <button class="btn btn-primary" type="submit">Enviar</button>
         <button class="btn btn-primary" type="reset">Cancelar</button>
@@ -498,6 +513,82 @@ justify-content-center">${message}</div>`);
         </div>`);
         }
         container.append(row);
+        this.categories.append(container);
+    }
+
+    showAsigDesasigForm(dishes, menus) {
+        this.categories.replaceChildren();
+        if (this.categories.children.length > 1) this.categories.children[1].remove();
+        const container = document.createElement('div');
+        container.classList.add('container');
+        container.classList.add('my-3');
+        container.id = 'gestMenu-Form';
+        container.insertAdjacentHTML(
+            'afterbegin',
+            '<h1 class="display-5">Gestionar platos del menú</h1>',
+        );
+
+        const form = document.createElement('form');
+        form.name = 'fGestMenu';
+        form.id = 'fGestMenu';
+        form.setAttribute('role', 'form');
+        form.classList.add('row');
+        form.classList.add('g-3');
+        form.setAttribute('novalidate', '');
+
+        container.appendChild(form);
+
+        form.insertAdjacentHTML(
+            'beforeend',
+            `<div class="col-md-3 mb-3">
+                      <label class="form-label text-white" for="npmenus">Platos *</label>
+                      <div class="input-group">
+                          <label class="input-group-text" for="npmenus"><i class="bi bi-card-checklist"></i></label>
+                          <select class="form-select" name="npmenus" id="npmenus" required>
+                          <option value="" id="menu"></option></select>
+                          <div class="invalid-feedback">Se debe elegir un menu al que asignarle un plato.</div>
+                          <div class="valid-feedback">Correcto.</div>
+                      </div>
+                  </div>`
+        );
+
+        const npmenus = form.querySelector('#npmenus');
+        for (const [key, menu] of menus) {
+            npmenus.insertAdjacentHTML(
+                "beforeend",
+                `<option value="${menu.newMenu.getName()}">${menu.newMenu.getName()}</option>`
+            );
+        }
+
+        form.insertAdjacentHTML(
+            "beforeend",
+            `<div class="col-md-3 mb-3">
+                          <label class="form-label text-white" for="npdishes">Platos *</label>
+                          <div class="input-group">
+                              <label class="input-group-text" for="npdishes"><i class="bi bi-card-checklist"></i></label>
+                              <select class="form-select" name="npdishes" id="npdishes" multiple required>
+                              </select>
+                              <div class="invalid-feedback">Se debe elegir al menos un plato para el menú.</div>
+                              <div class="valid-feedback">Correcto.</div>
+                          </div>
+                      </div>`
+        );
+
+        const npdishes = form.querySelector('#npdishes');
+        for (const [key, dish] of dishes) {
+            npdishes.insertAdjacentHTML(
+                "beforeend",
+                `<option value="${dish.newDish.getName()}">${dish.newDish.getName()}</option>`
+            );
+        }
+
+        form.insertAdjacentHTML(
+            'beforeend',
+            `<div class="mb-12">
+                    <button class="btn btn-primary" type="submit">Asignar</button>
+                    <button class="btn btn-primary" type="reset">Desasignar</button>
+                </div>`,
+        );
         this.categories.append(container);
     }
 
@@ -591,6 +682,7 @@ justify-content-center">${message}</div>`);
         }
     }
 
+    // Bind para mostrar el producto en un div aparte
     bindShowProduct(handler) {
         const productList = document.getElementById('product-list');
         const links = productList.querySelectorAll('a');
@@ -609,6 +701,7 @@ justify-content-center">${message}</div>`);
         }
     }
 
+    // Bind para abrir el plato en una nueva ventana
     bindShowProductInNewWindow(handler) {
         const bOpen = document.getElementById('b-open');
         bOpen.addEventListener('click', (event) => {
@@ -626,6 +719,7 @@ justify-content-center">${message}</div>`);
         });
     }
 
+    // Bind para cerrar las ventanas
     bindMenuEvents() {
         document.getElementById('close-all-windows').addEventListener('click', () => {
             this.closeAllWindows();
@@ -633,7 +727,7 @@ justify-content-center">${message}</div>`);
     }
 
     // Bind para crear el menu de administración con el botón de crear y borrar
-    bindAdminMenu(hNewDish, hRemoveDish) {
+    bindAdminMenu(hNewDish, hRemoveDish, hGestMenu) {
         const newCategoryLink = document.getElementById('lnewdish');
         newCategoryLink.addEventListener('click', (event) => {
             this[EXCECUTE_HANDLER](hNewDish, [], '#new-dish', {
@@ -649,9 +743,20 @@ justify-content-center">${message}</div>`);
             }, '#', event);
         });
 
+        const gestMenuLink = document.getElementById('lgestmenu');
+        gestMenuLink.addEventListener('click', (event) => {
+            this[EXCECUTE_HANDLER](hGestMenu, [], '#gest-menu', {
+                action: 'gestmenu'
+            }, '#', event);
+        });
+
     }
 
-    //Enlace para eliminar un plato
+    bindNewDishForm(handler) {
+        newDishValidation(handler);
+    }
+
+    // Bind para eliminar un plato
     bindRemoveDishForm(handler) {
         const removeContainer = document.getElementById('remove-dish');
         const buttons = removeContainer.getElementsByTagName('button');
@@ -662,9 +767,8 @@ justify-content-center">${message}</div>`);
         }
     }
 
-
-    bindNewDishForm(handler) {
-        newDishValidation(handler);
+    bindGestMenuForm(handler) {
+        gestMenuValidation(handler);
     }
 
 

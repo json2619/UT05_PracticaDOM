@@ -90,4 +90,73 @@ function newDishValidation(handler) {
     form.ndUrl.addEventListener('change', defaultCheckElement);
 }
 
-export { newDishValidation };
+function gestMenuValidation(handler) {
+    const form = document.forms.fGestMenu;
+    form.setAttribute('novalidate', true);
+    form.addEventListener('submit', function (event) {
+        let isValid = true;
+        let firstInvalidElement = null;
+        if (!this.npmenus.checkValidity()) {
+            isValid = false;
+            showFeedBack(this.npmenus, false);
+            firstInvalidElement = this.npmenus;
+        } else {
+            showFeedBack(this.npmenus, true);
+        }
+
+        if (!this.npdishes.checkValidity()) {
+            isValid = false;
+            showFeedBack(this.npdishes, false);
+            firstInvalidElement = this.npdishes;
+        } else {
+            showFeedBack(this.npdishes, true);
+        }
+        if (!isValid) {
+            firstInvalidElement.focus();
+        } else {
+            const dishes = [...this.npdishes.selectedOptions].map(
+                (option) => option.value
+            );
+            handler(
+                dishes, this.npmenus.value
+            );
+        }
+        event.preventDefault();
+        event.stopPropagation();
+    });
+    form.addEventListener('reset', (function (event) {
+        let isValid = true;
+        let firstInvalidElement = null;
+        if (!this.npmenus.checkValidity()) {
+            isValid = false;
+            showFeedBack(this.npmenus, false);
+            firstInvalidElement = this.npmenus;
+        } else {
+            showFeedBack(this.npmenus, true);
+        }
+
+        if (!this.npdishes.checkValidity()) {
+            isValid = false;
+            showFeedBack(this.npdishes, false);
+            firstInvalidElement = this.npdishes;
+        } else {
+            showFeedBack(this.npdishes, true);
+        }
+        if (!isValid) {
+            firstInvalidElement.focus();
+        } else {
+            const dishes = [...this.npdishes.selectedOptions].map(
+                (option) => option.value
+            );
+            handler(
+                dishes, this.npmenus.value
+            );
+        }
+        event.preventDefault();
+        event.stopPropagation();;
+    }));
+    form.npmenus.addEventListener('change', defaultCheckElement);
+    form.npdishes.addEventListener('change', defaultCheckElement);
+}
+
+export { newDishValidation, gestMenuValidation };

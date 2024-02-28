@@ -76,8 +76,7 @@ class RestaurantController {
         this[LOAD_RESTAURANT_OBJECT]();
         this.onAddCategory();
         this[VIEW].showAdminMenu();
-        this[VIEW].bindAdminMenu(this.handleNewDishForm, this.handleRemoveDishForm);
-
+        this[VIEW].bindAdminMenu(this.handleNewDishForm, this.handleRemoveDishForm, this.handleGestMenuForm);
     };
 
     onInit = () => {
@@ -146,7 +145,7 @@ class RestaurantController {
     };
 
     handleNewDishForm = () => {
-        this[VIEW].showNewDishForm();
+        this[VIEW].showNewDishForm(this[MODEL].getCategories(), this[MODEL].getAllergens());
         this[VIEW].bindNewDishForm(this.handleCreateDish);
     };
 
@@ -157,11 +156,9 @@ class RestaurantController {
         try {
             this[MODEL].addDish(dish);
             done = true;
-            console.log("El objeto creado es: " + dish);
         } catch (exception) {
             done = false;
             error = exception;
-            console.log("no se ha podido crear");
         }
     };
 
@@ -179,6 +176,44 @@ class RestaurantController {
             done = true;
             this.handleRemoveDishForm();
             this.onAddCategory();
+        } catch (exception) {
+            done = false;
+            error = exception;
+        }
+    };
+
+    handleGestMenuForm = () => {
+        this[VIEW].showAsigDesasigForm(this[MODEL].getDishes(), this[MODEL].getMenus());
+        this[VIEW].bindGestMenuForm(this.handleGestMenuAssign);
+        this[VIEW].bindGestMenuForm(this.handleGestMenuDesassign);
+    }
+
+    handleGestMenuAssign = (dishes, menuTitle) => {
+        let done; let error; let menu;
+        try {
+            menu = this[MODEL].getMenu(menuTitle);
+
+            for (const dish of dishes) {
+                let dishSelected = this[MODEL].getDish(dish);
+                this[MODEL].assignDishToMenu(menu.newMenu, dishSelected);
+            }
+            done = true;
+        } catch (exception) {
+            done = false;
+            error = exception;
+        }
+    };
+
+    handleGestMenuDesassign = (dishes, menuTitle) => {
+        let done; let error; let menu;
+        try {
+            menu = this[MODEL].getMenu(menuTitle);
+
+            for (const dish of dishes) {
+                let dishSelected = this[MODEL].getDish(dish);
+                this[MODEL].deassignDishToMenu(menu.newMenu, dishSelected);
+            }
+            done = true;
         } catch (exception) {
             done = false;
             error = exception;

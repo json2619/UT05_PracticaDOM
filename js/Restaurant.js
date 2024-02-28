@@ -42,6 +42,10 @@ const RestaurantsManager = (function () {
             return this.#menus[Symbol.iterator]();
         }
 
+        getMenu(title) {
+            return this.#menus.get(title);
+        }
+
         getAllergens() {
             return this.#allergens[Symbol.iterator]();
         }
@@ -336,14 +340,22 @@ const RestaurantsManager = (function () {
                 if (!menu || !dish) {
                     throw new EmptyValueException();
                 }
+
                 // Verificar si la categoría y el plato existen en el sistema
                 if (this.#menus.has(menu.getName())) {
+
                     // Obtener la categoría existente y el plato existente
                     const actualMenu = this.#menus.get(menu.getName());
 
                     if (this.#dishes.has(dish.getName())) {
-                        // Actualizar la información del plato en el mapa de platos
-                        actualMenu.dishMenuArr.push(dish);
+
+                        let estaPresente = actualMenu.dishMenuArr.some(function (element) {
+                            return element.getName() === dish.getName()
+                        });
+
+                        if (!estaPresente) {
+                            actualMenu.dishMenuArr.push(dish);
+                        }
                     } else {
                         this.addDish(dish);
                     }
