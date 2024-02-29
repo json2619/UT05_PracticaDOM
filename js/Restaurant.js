@@ -519,14 +519,14 @@ const RestaurantsManager = (function () {
         }
 
         // Metodo que crea una categoria y devuelve un objeto Category
-        createCategory(name, description) {
+        createCategory(name, description, image) {
             // Variable caategory que vamos a devolver
             let category;
 
             if (this.#categories.has(name)) {
                 category = this.#categories.get(name).category;
             } else {
-                category = new Category(name, description);
+                category = new Category(name, description, image);
             }
 
             // Devolvemos la categoria
@@ -534,9 +534,11 @@ const RestaurantsManager = (function () {
         }
 
         // Metodo que crea un restaurante y devuelve un objeto restaurant
-        createRestaurant(name, description, location, image) {
+        createRestaurant(name, description, locationx, locationy, image) {
             // Variable restaurant que vamos a devolver
             let restaurant;
+
+            let location = new Coordinate(locationx, locationy);
 
             if (this.#restaurants.has(name)) {
                 restaurant = this.#restaurants.get(name).restaurant;

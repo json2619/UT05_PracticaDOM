@@ -49,8 +49,9 @@ class Allergen {
 class Category {
     #name
     #description
+    #image
 
-    constructor(name, description = '') {
+    constructor(name, description = '', image) {
         // Comprobamoes si no se introduce ningun valor, lanzamos excepcion
         if (name === undefined || name === "") throw new EmptyValueException();
 
@@ -59,6 +60,7 @@ class Category {
 
         this.#name = name;
         this.#description = description;
+        this.#image = image;
     }
 
     getName() {
@@ -76,6 +78,15 @@ class Category {
     setDescription(newDescription) {
         this.#description = newDescription;
     }
+
+    getImage() {
+        return this.#image;
+    }
+
+    setImage(newImage) {
+        this.#image = newImage;
+    }
+
 
     toString() {
         return `Category: ${this.#name}, Description: ${this.#description}`;

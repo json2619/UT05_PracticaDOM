@@ -32,11 +32,6 @@ class RestaurantView {
 
     showCategories(categories) {
         this.categories.replaceChildren();
-        let imageUrls = {
-            'Entrantes': 'img/categorias/entrada.jpg',
-            'Sopas': 'img/categorias/sopa.jpg',
-            'Ensaladas': 'img/categorias/ensalada.jpg',
-        };
 
         if (this.categories.children.length > 1)
             this.categories.children[1].remove();
@@ -45,12 +40,10 @@ class RestaurantView {
         container.classList.add('row');
         for (const [name, value] of categories) {
 
-            let imageUrl = imageUrls[value.getName()];
-
             this.categories.insertAdjacentHTML('beforeend', `<div class="row">
             <div class="categories__div"><a href="#product-list" id="categories-list" data-type="${value.getName()}">
             <div class="categories__img"><img alt="${value.getName()}"
-            src="${imageUrl}" />
+            src="${value.getImage()}" />
             </div>
             <div class="categories__description">
             <h3>${value.getName()}</h3>
@@ -588,6 +581,98 @@ justify-content-center">${message}</div>`);
                     <button class="btn btn-primary" type="submit">Asignar</button>
                     <button class="btn btn-primary" type="reset">Desasignar</button>
                 </div>`,
+        );
+        this.categories.append(container);
+    }
+
+    showNewCategoryForm() {
+        this.categories.replaceChildren();
+        if (this.categories.children.length > 1) this.categories.children[1].remove();
+        const container = document.createElement('div');
+        container.classList.add('container');
+        container.classList.add('my-3');
+        container.id = 'gestDish-Form';
+        container.insertAdjacentHTML(
+            'afterbegin',
+            '<h1 class="display-5 text-white">Crear Categoría</h1>',
+        );
+        container.insertAdjacentHTML(
+            'beforeend',
+            `<form name="fNewDish" role="form" class="row g-3" novalidate>
+
+        <div class="col-md-6 mb-3">
+        <label class="form-label text-white" for="ndSerial">Serial del plato*</label>
+        <div class="input-group">
+        <span class="input-group-text"><i class="bi bi-type"></i></span>
+        <input type="text" class="form-control" id="ndSerial"
+        name="ndSerial"
+        placeholder="Serial del plato" value="" required>
+        <div class="invalid-feedback">Debe contener al menos un carácter alfanumérico.</div>
+        <div class="valid-feedback">Correcto.</div>
+        </div>
+        </div>
+
+        <div class="col-md-6 mb-3">
+        <label class="form-label text-white" for="ndTitle">Nombre del Plato*</label>
+        <div class="input-group">
+        <span class="input-group-text"><i class="bi bi-type"></i></span>
+        <input type="text" class="form-control" id="ndTitle"
+        name="ndTitle"
+        placeholder="nombre del plato" value="" required>
+        <div class="invalid-feedback">Debe contener al menos un carácter alfanumérico o espacio en blanco.</div>
+        <div class="valid-feedback">Correcto.</div>
+        </div>
+        </div>
+
+        <div class="col-md-12 mb-3">
+        <label class="form-label text-white" for="ndDescription">Descripción del plato*</label>
+        <div class="input-group">
+        <span class="input-group-text"><i class="bi bi-bodytext"></i></span>
+        <input type="text" class="form-control" id="ndDescription"
+        name="ndDescription" value=""  required>
+        <div class="invalid-feedback">Puede contener caracteres alfanuméricos y algunos signos de puntuación.</div>
+        <div class="valid-feedback">Correcto.</div>
+        </div>
+        </div>
+
+        <div class="col-md-12 mb-3">
+        <label class="form-label text-white" for="ndIngredients">Ingredientes*</label>
+        <div class="input-group">
+        <span class="input-group-text"><i class="bi bi-bodytext"></i></span>
+        <input type="text" class="form-control" id="ndIngredients"
+        name="ndIngredients" placeholder="ingrediente1, ingrediente2" value="" required>
+        <div class="invalid-feedback">Debe contener caracteres alfanuméricos, comas y algunos signos de puntuación.</div>
+        <div class="valid-feedback">Correcto.</div>
+        </div>
+        </div>
+
+        <div class="col-md-6 mb-3">
+        <label class="form-label text-white" for="ndUrl">URL de la imagen *</label>
+        <div class="input-group">
+        <span class="input-group-text"><i class="bi bi-fileimage"></i></span>
+        <input type="url" class="form-control" id="ndUrl" name="ndUrl"
+        placeholder="URL de la imagen"
+        value="" required>
+        <div class="invalid-feedback">La URL no es válida.</div>
+        <div class="valid-feedback">Correcto.</div>
+        </div>
+        </div>
+
+        <div class="col-md-12 mb-3">
+        <label class="form-label text-white" for="ndPrice">Precio*</label>
+        <div class="input-group">
+        <span class="input-group-text"><i class="bi bi-bodytext"></i></span>
+        <input type="text" class="form-control" id="ndPrice"
+        name="ndPrice" placeholder="introduzca el precio" value="" required>
+        <div class="invalid-feedback">Debe ser un número decimal positivo con hasta dos decimales.</div>
+        <div class="valid-feedback">Correcto.</div>
+        </div>
+        </div>
+        <div class="mb-12">
+        <button class="btn btn-primary" type="submit">Enviar</button>
+        <button class="btn btn-primary" type="reset">Cancelar</button>
+        </div>
+        </form>`,
         );
         this.categories.append(container);
     }

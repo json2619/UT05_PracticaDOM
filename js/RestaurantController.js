@@ -20,9 +20,9 @@ class RestaurantController {
     }
 
     [LOAD_RESTAURANT_OBJECT]() {
-        const category1 = this[MODEL].createCategory('Entrantes', 'Es un plato de comida que puede consumirse como 1er plato un plato de menor cantidad de comida que el plato principal.');
-        const category2 = this[MODEL].createCategory('Sopas', 'Son preparaciones culinarias consistentes en un líquido con sustancia y mucho sabor. En algunos casos poseen ingredientes sólido.');
-        const category3 = this[MODEL].createCategory('Ensaladas', 'Las ensaladas pueden estar compuestas de verduras, frutas y/o proteínas. Pueden tener ingredientes crudos y/o cocidos.');
+        const category1 = this[MODEL].createCategory('Entrantes', 'Es un plato de comida que puede consumirse como 1er plato un plato de menor cantidad de comida que el plato principal.', 'img/categorias/entrada.jpg');
+        const category2 = this[MODEL].createCategory('Sopas', 'Son preparaciones culinarias consistentes en un líquido con sustancia y mucho sabor. En algunos casos poseen ingredientes sólido.', 'img/categorias/sopa.jpg');
+        const category3 = this[MODEL].createCategory('Ensaladas', 'Las ensaladas pueden estar compuestas de verduras, frutas y/o proteínas. Pueden tener ingredientes crudos y/o cocidos.', 'img/categorias/ensalada.jpg');
 
         const allergen1 = this[MODEL].createAllergen('Allergen1', 'Description 1');
         const allergen2 = this[MODEL].createAllergen('Allergen2', 'Description 2');
@@ -48,9 +48,9 @@ class RestaurantController {
         const menu2 = this[MODEL].createMenu('Menu2', 'Menu Description 2');
         const menu3 = this[MODEL].createMenu('Menu3', 'Menu Description 3');
 
-        const restaurant1 = this[MODEL].createRestaurant('Restaurant1', 'Restaurant Description 1', new Coordinate(162, 120), 'img/restaurante/restaurante1.jpg');
-        const restaurant2 = this[MODEL].createRestaurant('Restaurant2', 'Restaurant Description 2', new Coordinate(138, 159), 'img/restaurante/restaurante2.jpeg');
-        const restaurant3 = this[MODEL].createRestaurant('Restaurant3', 'Restaurant Description 3', new Coordinate(192, 125), 'img/restaurante/restaurante3.jpeg');
+        const restaurant1 = this[MODEL].createRestaurant('Restaurant1', 'Restaurant Description 1', '162', '120', 'img/restaurante/restaurante1.jpg');
+        const restaurant2 = this[MODEL].createRestaurant('Restaurant2', 'Restaurant Description 2', '138', '159', 'img/restaurante/restaurante2.jpeg');
+        const restaurant3 = this[MODEL].createRestaurant('Restaurant3', 'Restaurant Description 3', '192', '125', 'img/restaurante/restaurante3.jpeg');
 
         this[MODEL].addCategory(category1).addCategory(category2).addCategory(category3).addMenu(menu1)
             .addMenu(menu2).addMenu(menu3).addAllergen(allergen1).addAllergen(allergen2).addAllergen(allergen3).addAllergen(allergen4)
