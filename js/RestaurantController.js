@@ -76,7 +76,7 @@ class RestaurantController {
         this[LOAD_RESTAURANT_OBJECT]();
         this.onAddCategory();
         this[VIEW].showAdminMenu();
-        this[VIEW].bindAdminMenu(this.handleNewDishForm, this.handleRemoveDishForm, this.handleGestMenuForm);
+        this[VIEW].bindAdminMenu(this.handleNewDishForm, this.handleRemoveDishForm, this.handleGestMenuForm, this.handleGestCategoryForm);
     };
 
     onInit = () => {
@@ -213,6 +213,25 @@ class RestaurantController {
                 let dishSelected = this[MODEL].getDish(dish);
                 this[MODEL].deassignDishToMenu(menu.newMenu, dishSelected);
             }
+            done = true;
+        } catch (exception) {
+            done = false;
+            error = exception;
+        }
+    };
+
+    handleGestCategoryForm = () => {
+        this[VIEW].showNewCategoryForm();
+        this[VIEW].bindGestCategory(this.handleGestCategory);
+    };
+
+    handleGestCategory = (name, desc, image) => {
+        let done; let error; let cat;
+
+        try {
+            cat = this[MODEL].createCategory(name, desc, image);
+            this[MODEL].addCategory(cat);
+            this.onAddCategory();
             done = true;
         } catch (exception) {
             done = false;

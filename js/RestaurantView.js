@@ -1,4 +1,4 @@
-import { newDishValidation, gestMenuValidation } from './validation.js';
+import { newDishValidation, gestMenuValidation, gestCategoryValidation } from './validation.js';
 const EXCECUTE_HANDLER = Symbol('excecuteHandler');
 
 class RestaurantView {
@@ -165,6 +165,7 @@ class RestaurantView {
             suboptions.insertAdjacentHTML('beforeend', '<li><a id="lnewdish" class= "dropdown-item" href = "#new-dish" > Crear plato</a ></li > ');
             suboptions.insertAdjacentHTML('beforeend', '<li><a id="ldeldish" class= "dropdown-item" href = "#del-dish" > Eliminar plato</a ></li > ');
             suboptions.insertAdjacentHTML('beforeend', '<li><a id="lgestmenu" class= "dropdown-item" href = "#gest-menu" >Gestión Menú</a ></li > ');
+            suboptions.insertAdjacentHTML('beforeend', '<li><a id="lgestcat" class= "dropdown-item" href = "#gest-cat" >Gestión Categorias</a ></li > ');
             menuOption.append(suboptions);
             this.nav.append(menuOption);
         }
@@ -598,26 +599,14 @@ justify-content-center">${message}</div>`);
         );
         container.insertAdjacentHTML(
             'beforeend',
-            `<form name="fNewDish" role="form" class="row g-3" novalidate>
+            `<form name="fNewCategory" role="form" class="row g-3" novalidate>
 
         <div class="col-md-6 mb-3">
-        <label class="form-label text-white" for="ndSerial">Serial del plato*</label>
+        <label class="form-label text-white" for="ncTitle">Nombre del Plato*</label>
         <div class="input-group">
         <span class="input-group-text"><i class="bi bi-type"></i></span>
-        <input type="text" class="form-control" id="ndSerial"
-        name="ndSerial"
-        placeholder="Serial del plato" value="" required>
-        <div class="invalid-feedback">Debe contener al menos un carácter alfanumérico.</div>
-        <div class="valid-feedback">Correcto.</div>
-        </div>
-        </div>
-
-        <div class="col-md-6 mb-3">
-        <label class="form-label text-white" for="ndTitle">Nombre del Plato*</label>
-        <div class="input-group">
-        <span class="input-group-text"><i class="bi bi-type"></i></span>
-        <input type="text" class="form-control" id="ndTitle"
-        name="ndTitle"
+        <input type="text" class="form-control" id="ncTitle"
+        name="ncTitle"
         placeholder="nombre del plato" value="" required>
         <div class="invalid-feedback">Debe contener al menos un carácter alfanumérico o espacio en blanco.</div>
         <div class="valid-feedback">Correcto.</div>
@@ -625,32 +614,21 @@ justify-content-center">${message}</div>`);
         </div>
 
         <div class="col-md-12 mb-3">
-        <label class="form-label text-white" for="ndDescription">Descripción del plato*</label>
+        <label class="form-label text-white" for="ncDescription">Descripción del plato*</label>
         <div class="input-group">
         <span class="input-group-text"><i class="bi bi-bodytext"></i></span>
-        <input type="text" class="form-control" id="ndDescription"
-        name="ndDescription" value=""  required>
+        <input type="text" class="form-control" id="ncDescription"
+        name="ncDescription" value=""  required>
         <div class="invalid-feedback">Puede contener caracteres alfanuméricos y algunos signos de puntuación.</div>
         <div class="valid-feedback">Correcto.</div>
         </div>
         </div>
 
-        <div class="col-md-12 mb-3">
-        <label class="form-label text-white" for="ndIngredients">Ingredientes*</label>
-        <div class="input-group">
-        <span class="input-group-text"><i class="bi bi-bodytext"></i></span>
-        <input type="text" class="form-control" id="ndIngredients"
-        name="ndIngredients" placeholder="ingrediente1, ingrediente2" value="" required>
-        <div class="invalid-feedback">Debe contener caracteres alfanuméricos, comas y algunos signos de puntuación.</div>
-        <div class="valid-feedback">Correcto.</div>
-        </div>
-        </div>
-
         <div class="col-md-6 mb-3">
-        <label class="form-label text-white" for="ndUrl">URL de la imagen *</label>
+        <label class="form-label text-white" for="ncUrl">URL de la imagen *</label>
         <div class="input-group">
         <span class="input-group-text"><i class="bi bi-fileimage"></i></span>
-        <input type="url" class="form-control" id="ndUrl" name="ndUrl"
+        <input type="url" class="form-control" id="ncUrl" name="ncUrl"
         placeholder="URL de la imagen"
         value="" required>
         <div class="invalid-feedback">La URL no es válida.</div>
@@ -658,16 +636,6 @@ justify-content-center">${message}</div>`);
         </div>
         </div>
 
-        <div class="col-md-12 mb-3">
-        <label class="form-label text-white" for="ndPrice">Precio*</label>
-        <div class="input-group">
-        <span class="input-group-text"><i class="bi bi-bodytext"></i></span>
-        <input type="text" class="form-control" id="ndPrice"
-        name="ndPrice" placeholder="introduzca el precio" value="" required>
-        <div class="invalid-feedback">Debe ser un número decimal positivo con hasta dos decimales.</div>
-        <div class="valid-feedback">Correcto.</div>
-        </div>
-        </div>
         <div class="mb-12">
         <button class="btn btn-primary" type="submit">Enviar</button>
         <button class="btn btn-primary" type="reset">Cancelar</button>
@@ -812,7 +780,7 @@ justify-content-center">${message}</div>`);
     }
 
     // Bind para crear el menu de administración con el botón de crear y borrar
-    bindAdminMenu(hNewDish, hRemoveDish, hGestMenu) {
+    bindAdminMenu(hNewDish, hRemoveDish, hGestMenu, hGestCat) {
         const newCategoryLink = document.getElementById('lnewdish');
         newCategoryLink.addEventListener('click', (event) => {
             this[EXCECUTE_HANDLER](hNewDish, [], '#new-dish', {
@@ -835,6 +803,13 @@ justify-content-center">${message}</div>`);
             }, '#', event);
         });
 
+        const gestCategoryLink = document.getElementById('lgestcat');
+        gestCategoryLink.addEventListener('click', (event) => {
+            this[EXCECUTE_HANDLER](hGestCat, [], '#gest-cat', {
+                action: 'gestcategory'
+            }, '#', event);
+        });
+
     }
 
     bindNewDishForm(handler) {
@@ -854,6 +829,10 @@ justify-content-center">${message}</div>`);
 
     bindGestMenuForm(handler) {
         gestMenuValidation(handler);
+    }
+
+    bindGestCategory(handler) {
+        gestCategoryValidation(handler)
     }
 
 

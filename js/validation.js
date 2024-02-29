@@ -159,4 +159,50 @@ function gestMenuValidation(handler) {
     form.npdishes.addEventListener('change', defaultCheckElement);
 }
 
-export { newDishValidation, gestMenuValidation };
+function gestCategoryValidation(handler) {
+    const form = document.forms.fNewCategory;
+    form.setAttribute('novalidate', true);
+    form.addEventListener('submit', function (event) {
+        let isValid = true;
+        let firstInvalidElement = null;
+        this.ncDescription.value = this.ncDescription.value.trim();
+        showFeedBack(this.ncDescription, true);
+        if (!this.ncUrl.checkValidity()) {
+            isValid = false;
+            showFeedBack(this.ncUrl, false);
+            firstInvalidElement = this.ncUrl;
+        } else {
+            showFeedBack(this.ncUrl, true);
+        }
+        if (!this.ncTitle.checkValidity()) {
+            isValid = false;
+            showFeedBack(this.ncTitle, false);
+            firstInvalidElement = this.ncTitle;
+        } else {
+            showFeedBack(this.ncTitle, true);
+        }
+        if (!isValid) {
+            firstInvalidElement.focus();
+        } else {
+            handler(this.ncTitle.value, this.ncDescription.value, this.ncUrl.value);
+        }
+        event.preventDefault();
+        event.stopPropagation();
+    });
+    form.addEventListener('reset', (function (event) {
+        for (const div of this.querySelectorAll('div.valid-feedback, div.invalid-feedback')) {
+            div.classList.remove('d-block');
+            div.classList.add('d-none');
+        }
+        for (const input of this.querySelectorAll('input')) {
+            input.classList.remove('is-valid');
+            input.classList.remove('is-invalid');
+        }
+        this.ncTitle.focus();
+    }));
+    form.ncTitle.addEventListener('change', defaultCheckElement);
+    form.ncDescription.addEventListener('change', defaultCheckElement);
+    form.ncUrl.addEventListener('change', defaultCheckElement);
+}
+
+export { newDishValidation, gestMenuValidation, gestCategoryValidation };
