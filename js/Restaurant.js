@@ -356,6 +356,7 @@ const RestaurantsManager = (function () {
                         if (!estaPresente) {
                             actualMenu.dishMenuArr.push(dish);
                         }
+
                     } else {
                         this.addDish(dish);
                     }

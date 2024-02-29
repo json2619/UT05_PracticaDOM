@@ -57,96 +57,50 @@ class RestaurantView {
     }
 
     showMenuCategories(categories) {
-        let existingDropdown = document.getElementById('navCats');
+        const navCats = document.getElementById('navCats');
+        let container = navCats.querySelector('.dropdown-menu');
 
-        // Si no existe, entonces crear el elemento
-        if (!existingDropdown) {
-            const li = document.createElement('li');
-            li.classList.add('menu_nav');
-            li.classList.add('nav-item');
-            li.classList.add('dropdown');
-
-            li.insertAdjacentHTML('beforeend', `<a class="nav-link dropdown-toggle" href="#" id="navCats" role="button" data-bs-toggle="dropdown" aria-expanded="false">Categorías</a>`);
-
-            const container = document.createElement('ul');
+        if (!container) {
+            container = document.createElement('ul');
             container.classList.add('dropdown-menu');
+            navCats.appendChild(container);
+        } else {
+            container.innerHTML = ''; // Vacía el contenido existente
+        }
 
-            for (const [name, value] of categories) {
-                container.insertAdjacentHTML('beforeend', `<li><a data-category="${value.getName()}" class="dropdown-item" href="#productlist">${value.getName()}</a></li>`);
-            }
-
-            li.append(container);
-            this.nav.append(li);
+        for (const [name, value] of categories) {
+            container.insertAdjacentHTML('beforeend', `<li><a data-category="${value.getName()}" class="dropdown-item" href="#productlist">${value.getName()}</a></li>`);
         }
     }
 
     showMenuAllergens(allergens) {
-        let existingDropdown = document.getElementById('navCats2');
-
-        if (!existingDropdown) {
-            const li = document.createElement('li');
-            li.classList.add('menu_nav');
-            li.classList.add('nav-item');
-            li.classList.add('dropdown');
-
-            li.insertAdjacentHTML('beforeend', `<a class="nav-link dropdown-toggle" href="#" id="navCats2" role="button" data-bs-toggle="dropdown" aria-expanded="false">Alérgenos</a>`);
-
-            const container = document.createElement('ul');
-            container.classList.add('dropdown-menu');
-
-            for (const [name, value] of allergens) {
-                container.insertAdjacentHTML('beforeend', `<li><a data-allergen="${value.getName()}" class="dropdown-item" href="#productlist">${value.getName()}</a></li>`);
-            }
-
-            li.append(container);
-            this.nav.append(li);
+        const navCats = document.getElementById('navCats2');
+        const container = document.createElement('ul');
+        container.classList.add('dropdown-menu');
+        for (const [name, value] of allergens) {
+            container.insertAdjacentHTML('beforeend', `<li><a data-allergen="${value.getName()}" class="dropdown-item" href="#productlist">${value.getName()}</a></li>`);
         }
+        navCats.append(container);
     }
 
     showMenuRestaurants(restaurants) {
-        let existingDropdown = document.getElementById('navCats3');
-
-        if (!existingDropdown) {
-            const li = document.createElement('li');
-            li.classList.add('menu_nav');
-            li.classList.add('nav-item');
-            li.classList.add('dropdown');
-
-            li.insertAdjacentHTML('beforeend', `<a class="nav-link dropdown-toggle" href="#" id="navCats3" role="button" data-bs-toggle="dropdown" aria-expanded="false">Restaurantes</a>`);
-
-            const container = document.createElement('ul');
-            container.classList.add('dropdown-menu');
-
-            for (const [name, value] of restaurants) {
-                container.insertAdjacentHTML('beforeend', `<li><a data-restaurant="${value.getName()}" class="dropdown-item" href="#productlist">${value.getName()}</a></li>`);
-            }
-
-            li.append(container);
-            this.nav.append(li);
+        const navCats = document.getElementById('navCats3');
+        const container = document.createElement('ul');
+        container.classList.add('dropdown-menu');
+        for (const [name, value] of restaurants) {
+            container.insertAdjacentHTML('beforeend', `<li><a data-restaurant="${value.getName()}" class="dropdown-item" href="#productlist">${value.getName()}</a></li>`);
         }
+        navCats.append(container);
     }
 
     showMenu(menus) {
-        let existingDropdown = document.getElementById('navCats4');
-
-        if (!existingDropdown) {
-            const li = document.createElement('li');
-            li.classList.add('menu_nav');
-            li.classList.add('nav-item');
-            li.classList.add('dropdown');
-
-            li.insertAdjacentHTML('beforeend', `<a class="nav-link dropdown-toggle" href="#" id="navCats4" role="button" data-bs-toggle="dropdown" aria-expanded="false">Menú</a>`);
-
-            const container = document.createElement('ul');
-            container.classList.add('dropdown-menu');
-
-            for (const [name, value] of menus) {
-                container.insertAdjacentHTML('beforeend', `<li><a data-menu="${value.newMenu.getName()}" class="dropdown-item" href="#productlist">${value.newMenu.getName()}</a></li>`);
-            }
-
-            li.append(container);
-            this.nav.append(li);
+        const navCats = document.getElementById('navCats4');
+        const container = document.createElement('ul');
+        container.classList.add('dropdown-menu');
+        for (const [name, value] of menus) {
+            container.insertAdjacentHTML('beforeend', `<li><a data-menu="${value.newMenu.getName()}" class="dropdown-item" href="#productlist">${value.newMenu.getName()}</a></li>`);
         }
+        navCats.append(container);
     }
 
     showAdminMenu() {
@@ -494,17 +448,20 @@ justify-content-center">${message}</div>`);
         const row = document.createElement('div');
         row.classList.add('row');
         for (const [key, value] of dishes) {
-            row.insertAdjacentHTML('beforeend', `<div class="col-lg-3 col-md6"><a data-dish="${value.newDish.getName()}" href="#product-list">
-        <div class="cat-list-image"><img alt="${value.newDish.getName()}"
-        src="${value.newDish.getImage()}" />
-        </div>
-        <div class="cat-list-text">
-        <h3>${value.newDish.getName()}</h3>
-        <div>${value.newDish.getDescription()}</div>
-        </div>
-        <div><button class="btn btn-primary" datadish="${value.newDish.getName()}" type='button'>Eliminar</button></div>
-        </a>
-        </div>`);
+            row.insertAdjacentHTML('beforeend', `<div class="row g-4">
+            <div class="col">
+              <a data-serial="${value.newDish.getName()}" href="#singleproduct" class="img-wrap">
+              <div class="card text-bg-dark">
+              <img src="${value.newDish.getImage()}" class="card-img" alt="${value.newDish.getName()}">
+              <div class="card-img-overlay">
+                <h5 class="card-title">${value.newDish.getName()}</h5>
+                <p class="card-text">Description: ${value.newDish.getDescription()}</p>
+              </div>
+            </div>
+            <div><button class="btn btn-primary" datadish="${value.newDish.getName()}" type='button'>Eliminar</button></div>
+              </a>
+            </div>
+          </div>`);
         }
         container.append(row);
         this.categories.append(container);
@@ -534,7 +491,7 @@ justify-content-center">${message}</div>`);
 
         form.insertAdjacentHTML(
             'beforeend',
-            `<div class="col-md-3 mb-3">
+            `<div class= "col-md-3 mb-3" >
                       <label class="form-label text-white" for="npmenus">Platos *</label>
                       <div class="input-group">
                           <label class="input-group-text" for="npmenus"><i class="bi bi-card-checklist"></i></label>
@@ -543,20 +500,20 @@ justify-content-center">${message}</div>`);
                           <div class="invalid-feedback">Se debe elegir un menu al que asignarle un plato.</div>
                           <div class="valid-feedback">Correcto.</div>
                       </div>
-                  </div>`
+                  </div> `
         );
 
         const npmenus = form.querySelector('#npmenus');
         for (const [key, menu] of menus) {
             npmenus.insertAdjacentHTML(
                 "beforeend",
-                `<option value="${menu.newMenu.getName()}">${menu.newMenu.getName()}</option>`
+                `<option value = "${menu.newMenu.getName()}" > ${menu.newMenu.getName()}</option> `
             );
         }
 
         form.insertAdjacentHTML(
             "beforeend",
-            `<div class="col-md-3 mb-3">
+            `<div class= "col-md-3 mb-3" >
                           <label class="form-label text-white" for="npdishes">Platos *</label>
                           <div class="input-group">
                               <label class="input-group-text" for="npdishes"><i class="bi bi-card-checklist"></i></label>
@@ -565,23 +522,23 @@ justify-content-center">${message}</div>`);
                               <div class="invalid-feedback">Se debe elegir al menos un plato para el menú.</div>
                               <div class="valid-feedback">Correcto.</div>
                           </div>
-                      </div>`
+                      </div > `
         );
 
         const npdishes = form.querySelector('#npdishes');
         for (const [key, dish] of dishes) {
             npdishes.insertAdjacentHTML(
                 "beforeend",
-                `<option value="${dish.newDish.getName()}">${dish.newDish.getName()}</option>`
+                `<option value = "${dish.newDish.getName()}" > ${dish.newDish.getName()}</option>`
             );
         }
 
         form.insertAdjacentHTML(
             'beforeend',
-            `<div class="mb-12">
+            `<div class= "mb-12" >
                     <button class="btn btn-primary" type="submit">Asignar</button>
                     <button class="btn btn-primary" type="reset">Desasignar</button>
-                </div>`,
+                </div > `,
         );
         this.categories.append(container);
     }
@@ -599,7 +556,7 @@ justify-content-center">${message}</div>`);
         );
         container.insertAdjacentHTML(
             'beforeend',
-            `<form name="fNewCategory" role="form" class="row g-3" novalidate>
+            `<form name = "fNewCategory" role = "form" class= "row g-3" novalidate >
 
         <div class="col-md-6 mb-3">
         <label class="form-label text-white" for="ncTitle">Nombre del Plato*</label>
@@ -640,7 +597,7 @@ justify-content-center">${message}</div>`);
         <button class="btn btn-primary" type="submit">Enviar</button>
         <button class="btn btn-primary" type="reset">Cancelar</button>
         </div>
-        </form>`,
+        </form> `,
         );
         this.categories.append(container);
     }
@@ -665,25 +622,25 @@ justify-content-center">${message}</div>`);
 
     bindProductsCategoryListInMenu(handler) {
         const navCats = document.getElementById('navCats');
-        const links = navCats.nextSibling.querySelectorAll('a');
-        for (const link of links) {
-            link.addEventListener('click', (event) => {
-                const { category } = event.currentTarget.getAttribute('data-category');
+        navCats.addEventListener('click', (event) => {
+            if (event.target.matches('a')) {
+                event.preventDefault(); // Evita que el enlace siga su comportamiento predeterminado
+                const category = event.target.getAttribute('data-category'); // Obtener el valor del atributo
                 this[EXCECUTE_HANDLER](
-                    handler(event.currentTarget.getAttribute('data-category')),
+                    handler(event.target.getAttribute('data-category')), // Pasar el valor del atributo como argumento
                     [category],
                     '#product-list',
                     { action: 'productsCategoryList', category },
                     '#category-list',
                     event,
                 );
-            });
-        }
+            }
+        });
     }
 
     bindProductsAllergenListInMenu(handler) {
         const navCats = document.getElementById('navCats2');
-        const links = navCats.nextSibling.querySelectorAll('a');
+        const links = navCats.querySelectorAll('a');
         for (const link of links) {
             link.addEventListener('click', (event) => {
                 const { category } = event.currentTarget.getAttribute('data-allergen');
@@ -701,7 +658,7 @@ justify-content-center">${message}</div>`);
 
     bindRestaurantListInMenu(handler) {
         const navCats = document.getElementById('navCats3');
-        const links = navCats.nextSibling.querySelectorAll('a');
+        const links = navCats.querySelectorAll('a');
         for (const link of links) {
             link.addEventListener('click', (event) => {
                 const { category } = event.currentTarget.getAttribute('data-restaurant');
@@ -719,7 +676,7 @@ justify-content-center">${message}</div>`);
 
     bindProductsMenuList(handler) {
         const navCats = document.getElementById('navCats4');
-        const links = navCats.nextSibling.querySelectorAll('a');
+        const links = navCats.querySelectorAll('a');
         for (const link of links) {
             link.addEventListener('click', (event) => {
                 const { category } = event.currentTarget.getAttribute('data-menu');

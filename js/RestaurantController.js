@@ -68,7 +68,7 @@ class RestaurantController {
             .assignAllergenToDish(dish7, allergen3).assignAllergenToDish(dish8, allergen3, allergen4).assignAllergenToDish(dish9, allergen2, allergen3)
             .assignAllergenToDish(dish10, allergen3, allergen4).assignAllergenToDish(dish11, allergen3, allergen4).assignAllergenToDish(dish12, allergen1, allergen3, allergen4);
 
-        this[MODEL].assignDishToMenu(menu1, dish1, dish3, dish5, dish7).assignDishToMenu(menu2, dish2, dish4, dish6, dish8).assignDishToMenu(menu3, dish9, dish10, dish11, dish12);
+        this[MODEL].assignDishToMenu(menu1, dish1, dish3, dish10, dish7).assignDishToMenu(menu2, dish2, dish4, dish6, dish8).assignDishToMenu(menu3, dish9, dish5, dish11, dish12);
 
     }
 
@@ -85,7 +85,7 @@ class RestaurantController {
         this[VIEW].showMenuRestaurants(this[MODEL].getRestaurants());
         this[VIEW].showMenu(this[MODEL].getMenus());
         this[VIEW].bindRestaurantListInMenu(this.handleRestaurantList);
-        this[VIEW].bindProductsCategoryListInMenu(this.handledishesCategoryList)
+        this[VIEW].bindProductsCategoryListInMenu(this.handledishesCategoryList);
         this[VIEW].bindProductsCategoryList(this.handledishesCategoryList);
         this[VIEW].bindProductsAllergenListInMenu(this.handledishesAllergenList);
         this[VIEW].bindProductsMenuList(this.handledishesMenuList);
