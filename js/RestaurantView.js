@@ -1,4 +1,4 @@
-import { newDishValidation, gestMenuValidation, gestCategoryValidation } from './validation.js';
+import { newDishValidation, gestMenuValidation, gestCategoryValidation, newRestaurantValidation } from './validation.js';
 const EXCECUTE_HANDLER = Symbol('excecuteHandler');
 
 class RestaurantView {
@@ -71,6 +71,8 @@ class RestaurantView {
         for (const [name, value] of categories) {
             container.insertAdjacentHTML('beforeend', `<li><a data-category="${value.getName()}" class="dropdown-item" href="#productlist">${value.getName()}</a></li>`);
         }
+
+        navCats.append(container);
     }
 
     showMenuAllergens(allergens) {
@@ -85,8 +87,16 @@ class RestaurantView {
 
     showMenuRestaurants(restaurants) {
         const navCats = document.getElementById('navCats3');
-        const container = document.createElement('ul');
-        container.classList.add('dropdown-menu');
+        let container = navCats.querySelector('.dropdown-menu');
+
+        if (!container) {
+            container = document.createElement('ul');
+            container.classList.add('dropdown-menu');
+            navCats.appendChild(container);
+        } else {
+            container.innerHTML = ''; // Vacía el contenido existente
+        }
+
         for (const [name, value] of restaurants) {
             container.insertAdjacentHTML('beforeend', `<li><a data-restaurant="${value.getName()}" class="dropdown-item" href="#productlist">${value.getName()}</a></li>`);
         }
@@ -120,6 +130,7 @@ class RestaurantView {
             suboptions.insertAdjacentHTML('beforeend', '<li><a id="ldeldish" class= "dropdown-item" href = "#del-dish" > Eliminar plato</a ></li > ');
             suboptions.insertAdjacentHTML('beforeend', '<li><a id="lgestmenu" class= "dropdown-item" href = "#gest-menu" >Gestión Menú</a ></li > ');
             suboptions.insertAdjacentHTML('beforeend', '<li><a id="lgestcat" class= "dropdown-item" href = "#gest-cat" >Gestión Categorias</a ></li > ');
+            suboptions.insertAdjacentHTML('beforeend', '<li><a id="lnewrest" class= "dropdown-item" href = "#new-rest" >Crear Restaurante</a ></li > ');
             menuOption.append(suboptions);
             this.nav.append(menuOption);
         }
@@ -559,19 +570,19 @@ justify-content-center">${message}</div>`);
             `<form name = "fNewCategory" role = "form" class= "row g-3" novalidate >
 
         <div class="col-md-6 mb-3">
-        <label class="form-label text-white" for="ncTitle">Nombre del Plato*</label>
+        <label class="form-label text-white" for="ncTitle">Nombre de la categoría*</label>
         <div class="input-group">
         <span class="input-group-text"><i class="bi bi-type"></i></span>
         <input type="text" class="form-control" id="ncTitle"
         name="ncTitle"
-        placeholder="nombre del plato" value="" required>
+        placeholder="Nombre de la categoría" value="" required>
         <div class="invalid-feedback">Debe contener al menos un carácter alfanumérico o espacio en blanco.</div>
         <div class="valid-feedback">Correcto.</div>
         </div>
         </div>
 
         <div class="col-md-12 mb-3">
-        <label class="form-label text-white" for="ncDescription">Descripción del plato*</label>
+        <label class="form-label text-white" for="ncDescription">Descripción de la categoría*</label>
         <div class="input-group">
         <span class="input-group-text"><i class="bi bi-bodytext"></i></span>
         <input type="text" class="form-control" id="ncDescription"
@@ -582,10 +593,91 @@ justify-content-center">${message}</div>`);
         </div>
 
         <div class="col-md-6 mb-3">
-        <label class="form-label text-white" for="ncUrl">URL de la imagen *</label>
+        <label class="form-label text-white" for="ncUrl">URL de la imagen de la categoría*</label>
         <div class="input-group">
         <span class="input-group-text"><i class="bi bi-fileimage"></i></span>
         <input type="url" class="form-control" id="ncUrl" name="ncUrl"
+        placeholder="URL de la imagen"
+        value="" required>
+        <div class="invalid-feedback">La URL no es válida.</div>
+        <div class="valid-feedback">Correcto.</div>
+        </div>
+        </div>
+
+        <div class="mb-12">
+        <button class="btn btn-primary" type="submit">Enviar</button>
+        <button class="btn btn-primary" type="reset">Cancelar</button>
+        </div>
+        </form> `,
+        );
+        this.categories.append(container);
+    }
+
+    showNewRestaurantForm() {
+        this.categories.replaceChildren();
+        if (this.categories.children.length > 1) this.categories.children[1].remove();
+        const container = document.createElement('div');
+        container.classList.add('container');
+        container.classList.add('my-3');
+        container.id = 'gestDish-Form';
+        container.insertAdjacentHTML(
+            'afterbegin',
+            '<h1 class="display-5 text-white">Crear Categoría</h1>',
+        );
+        container.insertAdjacentHTML(
+            'beforeend',
+            `<form name = "fNewRestaurant" role = "form" class= "row g-3" novalidate >
+
+        <div class="col-md-6 mb-3">
+        <label class="form-label text-white" for="nrTitle">Nombre del restaurante*</label>
+        <div class="input-group">
+        <span class="input-group-text"><i class="bi bi-type"></i></span>
+        <input type="text" class="form-control" id="nrTitle"
+        name="nrTitle"
+        placeholder="Nombre del restaurante" value="" required>
+        <div class="invalid-feedback">Debe contener al menos un carácter alfanumérico o espacio en blanco.</div>
+        <div class="valid-feedback">Correcto.</div>
+        </div>
+        </div>
+
+        <div class="col-md-12 mb-3">
+        <label class="form-label text-white" for="nrDescription">Descripción del restaurante*</label>
+        <div class="input-group">
+        <span class="input-group-text"><i class="bi bi-bodytext"></i></span>
+        <input type="text" class="form-control" id="nrDescription"
+        name="nrDescription" value=""  required>
+        <div class="invalid-feedback">Puede contener caracteres alfanuméricos y algunos signos de puntuación.</div>
+        <div class="valid-feedback">Correcto.</div>
+        </div>
+        </div>
+
+        <div class="col-md-12 mb-3">
+        <label class="form-label text-white" for="nrCoordinate1">Coordenada X*</label>
+        <div class="input-group">
+        <span class="input-group-text"><i class="bi bi-bodytext"></i></span>
+        <input type="text" class="form-control" id="nrCoordinate1"
+        name="nrCoordinate1" placeholder="Ejem: 165" pattern="/{0-9}{3}/v" maxlength="3" value=""  required>
+        <div class="invalid-feedback">Puede contener caracteres alfanuméricos y algunos signos de puntuación.</div>
+        <div class="valid-feedback">Correcto.</div>
+        </div>
+        </div>
+
+        <div class="col-md-12 mb-3">
+        <label class="form-label text-white" for="nrCoordinate2">Coordenada Y*</label>
+        <div class="input-group">
+        <span class="input-group-text"><i class="bi bi-bodytext"></i></span>
+        <input type="text" class="form-control" id="nrCoordinate2"
+        name="nrCoordinate2" placeholder="Ejem: 190" pattern="/{0-9}{3}/v" maxlength="3" value=""  required>
+        <div class="invalid-feedback">Puede contener caracteres alfanuméricos y algunos signos de puntuación.</div>
+        <div class="valid-feedback">Correcto.</div>
+        </div>
+        </div>
+
+        <div class="col-md-6 mb-3">
+        <label class="form-label text-white" for="nrUrl">URL de la imagen del restaurante*</label>
+        <div class="input-group">
+        <span class="input-group-text"><i class="bi bi-fileimage"></i></span>
+        <input type="url" class="form-control" id="nrUrl" name="nrUrl"
         placeholder="URL de la imagen"
         value="" required>
         <div class="invalid-feedback">La URL no es válida.</div>
@@ -737,7 +829,7 @@ justify-content-center">${message}</div>`);
     }
 
     // Bind para crear el menu de administración con el botón de crear y borrar
-    bindAdminMenu(hNewDish, hRemoveDish, hGestMenu, hGestCat) {
+    bindAdminMenu(hNewDish, hRemoveDish, hGestMenu, hGestCat, hNewRestaurant) {
         const newCategoryLink = document.getElementById('lnewdish');
         newCategoryLink.addEventListener('click', (event) => {
             this[EXCECUTE_HANDLER](hNewDish, [], '#new-dish', {
@@ -767,6 +859,14 @@ justify-content-center">${message}</div>`);
             }, '#', event);
         });
 
+        const newRestaurantLink = document.getElementById('lnewrest');
+        newRestaurantLink.addEventListener('click', (event) => {
+            this[EXCECUTE_HANDLER](hNewRestaurant, [], '#new-rest', {
+                action:
+                    'newRestaurant'
+            }, '#', event);
+        });
+
     }
 
     bindNewDishForm(handler) {
@@ -790,6 +890,10 @@ justify-content-center">${message}</div>`);
 
     bindGestCategory(handler) {
         gestCategoryValidation(handler)
+    }
+
+    bindNewRestaurantForm(handler) {
+        newRestaurantValidation(handler)
     }
 
 

@@ -76,13 +76,12 @@ class RestaurantController {
         this[LOAD_RESTAURANT_OBJECT]();
         this.onAddCategory();
         this[VIEW].showAdminMenu();
-        this[VIEW].bindAdminMenu(this.handleNewDishForm, this.handleRemoveDishForm, this.handleGestMenuForm, this.handleGestCategoryForm);
+        this[VIEW].bindAdminMenu(this.handleNewDishForm, this.handleRemoveDishForm, this.handleGestMenuForm, this.handleGestCategoryForm, this.handleNewRestaurantForm);
     };
 
     onInit = () => {
         this[VIEW].showDishes(this[MODEL].getDishes());
         this[VIEW].showMenuAllergens(this[MODEL].getAllergens());
-        this[VIEW].showMenuRestaurants(this[MODEL].getRestaurants());
         this[VIEW].showMenu(this[MODEL].getMenus());
         this[VIEW].bindRestaurantListInMenu(this.handleRestaurantList);
         this[VIEW].bindProductsCategoryListInMenu(this.handledishesCategoryList);
@@ -94,6 +93,7 @@ class RestaurantController {
     onAddCategory = () => {
         this[VIEW].showCategories(this[MODEL].getCategories());
         this[VIEW].showMenuCategories(this[MODEL].getCategories());
+        this[VIEW].showMenuRestaurants(this[MODEL].getRestaurants());
     };
 
     handleInit = () => {
@@ -231,6 +231,25 @@ class RestaurantController {
         try {
             cat = this[MODEL].createCategory(name, desc, image);
             this[MODEL].addCategory(cat);
+            this.onAddCategory();
+            done = true;
+        } catch (exception) {
+            done = false;
+            error = exception;
+        }
+    };
+
+    handleNewRestaurantForm = () => {
+        this[VIEW].showNewRestaurantForm();
+        this[VIEW].bindNewRestaurantForm(this.handlNewRestaurant);
+    };
+
+    handlNewRestaurant = (name, desc, coord1, coord2, image) => {
+        let done; let error; let rest;
+
+        try {
+            rest = this[MODEL].createRestaurant(name, desc, coord1, coord2, image);
+            this[MODEL].addRestaurant(rest);
             this.onAddCategory();
             done = true;
         } catch (exception) {

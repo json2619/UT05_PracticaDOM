@@ -205,4 +205,66 @@ function gestCategoryValidation(handler) {
     form.ncUrl.addEventListener('change', defaultCheckElement);
 }
 
-export { newDishValidation, gestMenuValidation, gestCategoryValidation };
+function newRestaurantValidation(handler) {
+    const form = document.forms.fNewRestaurant;
+    form.setAttribute('novalidate', true);
+    form.addEventListener('submit', function (event) {
+        let isValid = true;
+        let firstInvalidElement = null;
+        this.nrDescription.value = this.nrDescription.value.trim();
+        showFeedBack(this.nrDescription, true);
+        if (!this.nrUrl.checkValidity()) {
+            isValid = false;
+            showFeedBack(this.nrUrl, false);
+            firstInvalidElement = this.nrUrl;
+        } else {
+            showFeedBack(this.nrUrl, true);
+        }
+        if (!this.nrTitle.checkValidity()) {
+            isValid = false;
+            showFeedBack(this.nrTitle, false);
+            firstInvalidElement = this.nrTitle;
+        } else {
+            showFeedBack(this.nrTitle, true);
+        }
+        if (!this.nrCoordinate1.checkValidity()) {
+            isValid = false;
+            showFeedBack(this.nrCoordinate1, false);
+            firstInvalidElement = this.nrCoordinate1;
+        } else {
+            showFeedBack(this.nrCoordinate1, true);
+        }
+        if (!this.nrCoordinate2.checkValidity()) {
+            isValid = false;
+            showFeedBack(this.nrCoordinate2, false);
+            firstInvalidElement = this.nrCoordinate2;
+        } else {
+            showFeedBack(this.nrCoordinate2, true);
+        }
+        if (!isValid) {
+            firstInvalidElement.focus();
+        } else {
+            handler(this.nrTitle.value, this.nrDescription.value, this.nrCoordinate1.value, this.nrCoordinate2.value, this.nrUrl.value);
+        }
+        event.preventDefault();
+        event.stopPropagation();
+    });
+    form.addEventListener('reset', (function (event) {
+        for (const div of this.querySelectorAll('div.valid-feedback, div.invalid-feedback')) {
+            div.classList.remove('d-block');
+            div.classList.add('d-none');
+        }
+        for (const input of this.querySelectorAll('input')) {
+            input.classList.remove('is-valid');
+            input.classList.remove('is-invalid');
+        }
+        this.nrTitle.focus();
+    }));
+    form.nrTitle.addEventListener('change', defaultCheckElement);
+    form.nrDescription.addEventListener('change', defaultCheckElement);
+    form.nrCoordinate1.addEventListener('change', defaultCheckElement);
+    form.nrCoordinate2.addEventListener('change', defaultCheckElement);
+    form.nrUrl.addEventListener('change', defaultCheckElement);
+}
+
+export { newDishValidation, gestMenuValidation, gestCategoryValidation, newRestaurantValidation };
