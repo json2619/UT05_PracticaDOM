@@ -363,10 +363,20 @@ justify-content-center">${message}</div>`);
             'afterbegin',
             '<h1 class="display-5 text-white">Crear plato</h1>',
         );
-        container.insertAdjacentHTML(
-            'beforeend',
-            `<form name="fNewDish" role="form" class="row g-3" novalidate>
 
+        const form = document.createElement('form');
+        form.name = 'fNewDish';
+        form.id = 'fGestMenu';
+        form.setAttribute('role', 'form');
+        form.classList.add('row');
+        form.classList.add('g-3');
+        form.setAttribute('novalidate', '');
+
+        container.appendChild(form);
+
+        form.insertAdjacentHTML(
+            'beforeend',
+            `
         <div class="col-md-6 mb-3">
         <label class="form-label text-white" for="ndSerial">Serial del plato*</label>
         <div class="input-group">
