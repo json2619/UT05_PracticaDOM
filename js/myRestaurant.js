@@ -17,6 +17,10 @@ const historyActions = {
     showProducts: (event) => RestaurantApp.handleShowProduct(event.currentTarget.getAttribute('data-serial')),
     newDish: () => RestaurantApp.handleNewDishForm(),
     removeDish: () => RestaurantApp.handleRemoveDishForm(),
+    gestMenu: () => RestaurantApp.handleGestMenuForm(),
+    gestcategory: () => RestaurantApp.handleGestCategoryForm(),
+    newRestaurant: () => RestaurantApp.handleNewRestaurantForm(),
+    delCategory: () => RestaurantApp.handleDelCategoryForm(),
 };
 
 history.replaceState({ action: 'init' }, null);

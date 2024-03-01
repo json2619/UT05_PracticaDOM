@@ -1,4 +1,4 @@
-import { newDishValidation, gestMenuValidation, gestCategoryValidation, newRestaurantValidation } from './validation.js';
+import { newDishValidation, gestMenuValidation, gestCategoryValidation, newRestaurantValidation, DelCategoryValidation } from './validation.js';
 const EXCECUTE_HANDLER = Symbol('excecuteHandler');
 
 class RestaurantView {
@@ -131,6 +131,7 @@ class RestaurantView {
             suboptions.insertAdjacentHTML('beforeend', '<li><a id="lgestmenu" class= "dropdown-item" href = "#gest-menu" >Gestión Menú</a ></li > ');
             suboptions.insertAdjacentHTML('beforeend', '<li><a id="lgestcat" class= "dropdown-item" href = "#gest-cat" >Gestión Categorias</a ></li > ');
             suboptions.insertAdjacentHTML('beforeend', '<li><a id="lnewrest" class= "dropdown-item" href = "#new-rest" >Crear Restaurante</a ></li > ');
+            suboptions.insertAdjacentHTML('beforeend', '<li><a id="ldelcat" class= "dropdown-item" href = "#del-cat" >Eliminar Categoría</a ></li > ');
             menuOption.append(suboptions);
             this.nav.append(menuOption);
         }
@@ -366,7 +367,7 @@ justify-content-center">${message}</div>`);
 
         const form = document.createElement('form');
         form.name = 'fNewDish';
-        form.id = 'fGestMenu';
+        form.id = 'fNewDish';
         form.setAttribute('role', 'form');
         form.classList.add('row');
         form.classList.add('g-3');
@@ -560,7 +561,7 @@ justify-content-center">${message}</div>`);
         form.insertAdjacentHTML(
             'beforeend',
             `<div class= "col-md-3 mb-3" >
-                      <label class="form-label text-white" for="npmenus">Platos *</label>
+                      <label class="form-label text-white" for="npmenus">Menús *</label>
                       <div class="input-group">
                           <label class="input-group-text" for="npmenus"><i class="bi bi-card-checklist"></i></label>
                           <select class="form-select" name="npmenus" id="npmenus" required>
@@ -582,20 +583,20 @@ justify-content-center">${message}</div>`);
         form.insertAdjacentHTML(
             "beforeend",
             `<div class= "col-md-3 mb-3" >
-                          <label class="form-label text-white" for="ndAllergens">Platos *</label>
+                          <label class="form-label text-white" for="npdishes">Platos *</label>
                           <div class="input-group">
-                              <label class="input-group-text" for="ndAllergens"><i class="bi bi-card-checklist"></i></label>
-                              <select class="form-select" name="ndAllergens" id="ndAllergens" multiple required>
-                              </select>
+                              <label class="input-group-text" for="npdishes"><i class="bi bi-card-checklist"></i></label>
+                              <select class="form-select" name="npdishes" id="npdishes" multiple required>
+                              <option value="" id="menu"></option></select>
                               <div class="invalid-feedback">Se debe elegir al menos un plato para el menú.</div>
                               <div class="valid-feedback">Correcto.</div>
                           </div>
                       </div > `
         );
 
-        const ndAllergens = form.querySelector('#ndAllergens');
+        const npdishes = form.querySelector('#npdishes');
         for (const [key, dish] of dishes) {
-            ndAllergens.insertAdjacentHTML(
+            npdishes.insertAdjacentHTML(
                 "beforeend",
                 `<option value = "${dish.newDish.getName()}" > ${dish.newDish.getName()}</option>`
             );
@@ -617,14 +618,14 @@ justify-content-center">${message}</div>`);
         const container = document.createElement('div');
         container.classList.add('container');
         container.classList.add('my-3');
-        container.id = 'gestDish-Form';
+        container.id = 'newCat-Form';
         container.insertAdjacentHTML(
             'afterbegin',
-            '<h1 class="display-5 text-white">Crear Categoría</h1>',
+            '<h1 class="display-5 text-white">Crear Categoría</h1>'
         );
         container.insertAdjacentHTML(
             'beforeend',
-            `<form name = "fNewCategory" role = "form" class= "row g-3" novalidate >
+            `<form name="fNewCategory" role ="form" class="row g-3" novalidate >
 
         <div class="col-md-6 mb-3">
         <label class="form-label text-white" for="ncTitle">Nombre de la categoría*</label>
@@ -676,7 +677,7 @@ justify-content-center">${message}</div>`);
         const container = document.createElement('div');
         container.classList.add('container');
         container.classList.add('my-3');
-        container.id = 'gestDish-Form';
+        container.id = 'newRestaurant-Form';
         container.insertAdjacentHTML(
             'afterbegin',
             '<h1 class="display-5 text-white">Crear Categoría</h1>',
@@ -713,7 +714,7 @@ justify-content-center">${message}</div>`);
         <div class="input-group">
         <span class="input-group-text"><i class="bi bi-bodytext"></i></span>
         <input type="text" class="form-control" id="nrCoordinate1"
-        name="nrCoordinate1" placeholder="Ejem: 165" pattern="/{0-9}{3}/v" maxlength="3" value=""  required>
+        name="nrCoordinate1" placeholder="Ejem: 165" maxlength="3" value=""  required>
         <div class="invalid-feedback">Puede contener caracteres alfanuméricos y algunos signos de puntuación.</div>
         <div class="valid-feedback">Correcto.</div>
         </div>
@@ -724,7 +725,7 @@ justify-content-center">${message}</div>`);
         <div class="input-group">
         <span class="input-group-text"><i class="bi bi-bodytext"></i></span>
         <input type="text" class="form-control" id="nrCoordinate2"
-        name="nrCoordinate2" placeholder="Ejem: 190" pattern="/{0-9}{3}/v" maxlength="3" value=""  required>
+        name="nrCoordinate2" placeholder="Ejem: 190" maxlength="3" value=""  required>
         <div class="invalid-feedback">Puede contener caracteres alfanuméricos y algunos signos de puntuación.</div>
         <div class="valid-feedback">Correcto.</div>
         </div>
@@ -747,6 +748,60 @@ justify-content-center">${message}</div>`);
         <button class="btn btn-primary" type="reset">Cancelar</button>
         </div>
         </form> `,
+        );
+        this.categories.append(container);
+    }
+
+    showDelCategoryForm(categories) {
+        this.categories.replaceChildren();
+        if (this.categories.children.length > 1) this.categories.children[1].remove();
+        const container = document.createElement('div');
+        container.classList.add('container');
+        container.classList.add('my-3');
+        container.id = 'delCat-Form';
+        container.insertAdjacentHTML(
+            'afterbegin',
+            '<h1 class="display-5">Borrar Categorias</h1>',
+        );
+
+        const form = document.createElement('form');
+        form.name = 'fDelCat';
+        form.id = 'fDelCat';
+        form.setAttribute('role', 'form');
+        form.classList.add('row');
+        form.classList.add('g-3');
+        form.setAttribute('novalidate', '');
+
+        container.appendChild(form);
+
+        form.insertAdjacentHTML(
+            'beforeend',
+            `<div class= "col-md-3 mb-3" >
+                      <label class="form-label text-white" for="delCat">Menús *</label>
+                      <div class="input-group">
+                          <label class="input-group-text" for="delCat"><i class="bi bi-card-checklist"></i></label>
+                          <select class="form-select" name="delCat" id="delCat" required>
+                          <option value="" id="menu"></option></select>
+                          <div class="invalid-feedback">Se debe elegir un menu al que asignarle un plato.</div>
+                          <div class="valid-feedback">Correcto.</div>
+                      </div>
+                  </div> `
+        );
+
+        const delCat = form.querySelector('#delCat');
+        for (const [key, cat] of categories) {
+            delCat.insertAdjacentHTML(
+                "beforeend",
+                `<option value = "${cat.getName()}" > ${cat.getName()}</option> `
+            );
+        }
+
+        form.insertAdjacentHTML(
+            'beforeend',
+            `<div class= "mb-12" >
+                    <button class="btn btn-primary" type="submit">Eliminar</button>
+                    <button class="btn btn-primary" type="reset">Cancelar</button>
+                </div > `,
         );
         this.categories.append(container);
     }
@@ -886,17 +941,17 @@ justify-content-center">${message}</div>`);
     }
 
     // Bind para crear el menu de administración con el botón de crear y borrar
-    bindAdminMenu(hNewDish, hRemoveDish, hGestMenu, hGestCat, hNewRestaurant) {
-        const newCategoryLink = document.getElementById('lnewdish');
-        newCategoryLink.addEventListener('click', (event) => {
+    bindAdminMenu(hNewDish, hRemoveDish, hGestMenu, hGestCat, hNewRestaurant, hdelCategory) {
+        const newDishLink = document.getElementById('lnewdish');
+        newDishLink.addEventListener('click', (event) => {
             this[EXCECUTE_HANDLER](hNewDish, [], '#new-dish', {
                 action:
                     'newDish'
             }, '#', event);
         });
 
-        const delCategoryLink = document.getElementById('ldeldish');
-        delCategoryLink.addEventListener('click', (event) => {
+        const delDishLink = document.getElementById('ldeldish');
+        delDishLink.addEventListener('click', (event) => {
             this[EXCECUTE_HANDLER](hRemoveDish, [], '#del-dish', {
                 action: 'removeDish'
             }, '#', event);
@@ -921,6 +976,14 @@ justify-content-center">${message}</div>`);
             this[EXCECUTE_HANDLER](hNewRestaurant, [], '#new-rest', {
                 action:
                     'newRestaurant'
+            }, '#', event);
+        });
+
+        const delCategoryLink = document.getElementById('ldelcat');
+        delCategoryLink.addEventListener('click', (event) => {
+            this[EXCECUTE_HANDLER](hdelCategory, [], '#del-cat', {
+                action:
+                    'delCategory'
             }, '#', event);
         });
 
@@ -951,6 +1014,10 @@ justify-content-center">${message}</div>`);
 
     bindNewRestaurantForm(handler) {
         newRestaurantValidation(handler)
+    }
+
+    bindDelCatgory(handler) {
+        DelCategoryValidation(handler);
     }
 
 

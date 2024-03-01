@@ -124,7 +124,6 @@ function gestMenuValidation(handler) {
         } else {
             showFeedBack(this.npmenus, true);
         }
-
         if (!this.npdishes.checkValidity()) {
             isValid = false;
             showFeedBack(this.npdishes, false);
@@ -288,4 +287,39 @@ function newRestaurantValidation(handler) {
     form.nrUrl.addEventListener('change', defaultCheckElement);
 }
 
-export { newDishValidation, gestMenuValidation, gestCategoryValidation, newRestaurantValidation };
+function DelCategoryValidation(handler) {
+    const form = document.forms.fDelCat;
+    form.setAttribute('novalidate', true);
+    form.addEventListener('submit', function (event) {
+        let isValid = true;
+        let firstInvalidElement = null;
+        if (!this.delCat.checkValidity()) {
+            isValid = false;
+            showFeedBack(this.delCat, false);
+            firstInvalidElement = this.delCat;
+        } else {
+            showFeedBack(this.delCat, true);
+        }
+        if (!isValid) {
+            firstInvalidElement.focus();
+        } else {
+            handler(this.delCat.value);
+        }
+        event.preventDefault();
+        event.stopPropagation();
+    });
+    form.addEventListener('reset', (function (event) {
+        for (const div of this.querySelectorAll('div.valid-feedback, div.invalid-feedback')) {
+            div.classList.remove('d-block');
+            div.classList.add('d-none');
+        }
+        for (const input of this.querySelectorAll('input')) {
+            input.classList.remove('is-valid');
+            input.classList.remove('is-invalid');
+        }
+        this.nrTitle.focus();
+    }));
+    form.delCat.addEventListener('change', defaultCheckElement);
+}
+
+export { newDishValidation, gestMenuValidation, gestCategoryValidation, newRestaurantValidation, DelCategoryValidation };

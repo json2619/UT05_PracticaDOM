@@ -16,7 +16,6 @@ class RestaurantController {
         this.onInit();
 
         this[VIEW].bindInit(this.handleInit);
-        this[VIEW].bindMenuEvents();
     }
 
     [LOAD_RESTAURANT_OBJECT]() {
@@ -75,26 +74,27 @@ class RestaurantController {
     onLoad = () => {
         this[LOAD_RESTAURANT_OBJECT]();
         this.onAddCategory();
+        this[VIEW].showMenuAllergens(this[MODEL].getAllergens());
+        this.onAddRestaurant();
+        this.onAddMenu();
         this[VIEW].showAdminMenu();
-        this[VIEW].bindAdminMenu(this.handleNewDishForm, this.handleRemoveDishForm, this.handleGestMenuForm, this.handleGestCategoryForm, this.handleNewRestaurantForm);
+        this[VIEW].bindAdminMenu(this.handleNewDishForm, this.handleRemoveDishForm, this.handleGestMenuForm, this.handleGestCategoryForm, this.handleNewRestaurantForm, this.handleDelCategoryForm);
     };
 
     onInit = () => {
+        this[VIEW].showCategories(this[MODEL].getCategories());
         this[VIEW].showDishes(this[MODEL].getDishes());
-        this[VIEW].showMenuAllergens(this[MODEL].getAllergens());
-        this[VIEW].showMenu(this[MODEL].getMenus());
         this[VIEW].bindProductsCategoryList(this.handledishesCategoryList);
+        this[VIEW].bindRestaurantListInMenu(this.handleRestaurantList);
         this[VIEW].bindProductsAllergenListInMenu(this.handledishesAllergenList);
         this[VIEW].bindProductsMenuList(this.handledishesMenuList);
     }
 
     onAddCategory = () => {
-        this.onInit()
-        this[VIEW].showCategories(this[MODEL].getCategories());
         this[VIEW].showMenuCategories(this[MODEL].getCategories());
-        this[VIEW].showMenuRestaurants(this[MODEL].getRestaurants());
-        this[VIEW].bindRestaurantListInMenu(this.handleRestaurantList);
         this[VIEW].bindProductsCategoryListInMenu(this.handledishesCategoryList);
+        this[VIEW].bindProductsAllergenListInMenu(this.handledishesAllergenList);
+        this[VIEW].bindProductsMenuList(this.handledishesMenuList);
     };
 
     handleInit = () => {
@@ -186,8 +186,8 @@ class RestaurantController {
             dish = this[MODEL].getDish(title);
             this[MODEL].removeDish(dish);
             done = true;
-            this.handleRemoveDishForm();
             this.onAddCategory();
+            this.handleRemoveDishForm();
         } catch (exception) {
             done = false;
             error = exception;
@@ -209,6 +209,7 @@ class RestaurantController {
                 let dishSelected = this[MODEL].getDish(dish);
                 this[MODEL].assignDishToMenu(menu.newMenu, dishSelected);
             }
+            this.onAddMenu();
             done = true;
         } catch (exception) {
             done = false;
@@ -225,6 +226,7 @@ class RestaurantController {
                 let dishSelected = this[MODEL].getDish(dish);
                 this[MODEL].deassignDishToMenu(menu.newMenu, dishSelected);
             }
+            this.onAddMenu();
             done = true;
         } catch (exception) {
             done = false;
@@ -262,6 +264,25 @@ class RestaurantController {
         try {
             rest = this[MODEL].createRestaurant(name, desc, coord1, coord2, image);
             this[MODEL].addRestaurant(rest);
+            this.onAddRestaurant();
+            done = true;
+        } catch (exception) {
+            done = false;
+            error = exception;
+        }
+    };
+
+    handleDelCategoryForm = () => {
+        this[VIEW].showDelCategoryForm(this[MODEL].getCategories());
+        this[VIEW].bindDelCatgory(this.handlDelCategory);
+    };
+
+    handlDelCategory = (categoryName) => {
+        let done; let error; let cat;
+
+        try {
+            cat = this[MODEL].getCategory(categoryName);
+            this[MODEL].removeCategory(cat);
             this.onAddCategory();
             done = true;
         } catch (exception) {
@@ -270,6 +291,13 @@ class RestaurantController {
         }
     };
 
+    onAddMenu = () => {
+        this[VIEW].showMenu(this[MODEL].getMenus());
+    };
+
+    onAddRestaurant = () => {
+        this[VIEW].showMenuRestaurants(this[MODEL].getRestaurants());
+    };
 }
 
 export default RestaurantController;
