@@ -83,8 +83,6 @@ class RestaurantController {
         this[VIEW].showDishes(this[MODEL].getDishes());
         this[VIEW].showMenuAllergens(this[MODEL].getAllergens());
         this[VIEW].showMenu(this[MODEL].getMenus());
-        this[VIEW].bindRestaurantListInMenu(this.handleRestaurantList);
-        this[VIEW].bindProductsCategoryListInMenu(this.handledishesCategoryList);
         this[VIEW].bindProductsCategoryList(this.handledishesCategoryList);
         this[VIEW].bindProductsAllergenListInMenu(this.handledishesAllergenList);
         this[VIEW].bindProductsMenuList(this.handledishesMenuList);
@@ -94,6 +92,9 @@ class RestaurantController {
         this[VIEW].showCategories(this[MODEL].getCategories());
         this[VIEW].showMenuCategories(this[MODEL].getCategories());
         this[VIEW].showMenuRestaurants(this[MODEL].getRestaurants());
+        this[VIEW].bindRestaurantListInMenu(this.handleRestaurantList);
+        this[VIEW].bindProductsCategoryListInMenu(this.handledishesCategoryList);
+        this.onInit()
     };
 
     handleInit = () => {
