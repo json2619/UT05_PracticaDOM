@@ -89,12 +89,12 @@ class RestaurantController {
     }
 
     onAddCategory = () => {
+        this.onInit()
         this[VIEW].showCategories(this[MODEL].getCategories());
         this[VIEW].showMenuCategories(this[MODEL].getCategories());
         this[VIEW].showMenuRestaurants(this[MODEL].getRestaurants());
         this[VIEW].bindRestaurantListInMenu(this.handleRestaurantList);
         this[VIEW].bindProductsCategoryListInMenu(this.handledishesCategoryList);
-        this.onInit()
     };
 
     handleInit = () => {
@@ -150,12 +150,23 @@ class RestaurantController {
         this[VIEW].bindNewDishForm(this.handleCreateDish);
     };
 
-    handleCreateDish = (serial, name, description, ingredients, image, price) => {
+    handleCreateDish = (serial, name, description, ingredients, image, price, categories, allergens) => {
+
         const dish = this[MODEL].createDish(serial, name, description, ingredients, image, price);
         let done; let
             error;
         try {
             this[MODEL].addDish(dish);
+
+            for (const cat of categories) {
+                let catSelected = this[MODEL].getCategory(cat);
+                this[MODEL].assignCategoryToDish(dish, catSelected);
+            }
+
+            for (const allergen of allergens) {
+                let allSelected = this[MODEL].getAllergen(allergen);
+                this[MODEL].assignAllergenToDish(dish, allSelected);
+            }
             done = true;
         } catch (exception) {
             done = false;

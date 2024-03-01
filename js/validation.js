@@ -67,10 +67,31 @@ function newDishValidation(handler) {
         } else {
             showFeedBack(this.ndPrice, true);
         }
+        if (!this.ndCat.checkValidity()) {
+            isValid = false;
+            showFeedBack(this.ndCat, false);
+            firstInvalidElement = this.ndCat;
+        } else {
+            showFeedBack(this.ndCat, true);
+        }
+        if (!this.ndAllergens.checkValidity()) {
+            isValid = false;
+            showFeedBack(this.ndAllergens, false);
+            firstInvalidElement = this.ndAllergens;
+        } else {
+            showFeedBack(this.ndAllergens, true);
+        }
         if (!isValid) {
             firstInvalidElement.focus();
         } else {
-            handler(this.ndSerial.value, this.ndTitle.value, this.ndDescription.value, this.ndIngredients.value, this.ndUrl.value, this.ndPrice.value);
+            const categories = [...this.ndCat.selectedOptions].map(
+                (option) => option.value
+            );
+            const allergens = [...this.ndAllergens.selectedOptions].map(
+                (option) => option.value
+            );
+
+            handler(this.ndSerial.value, this.ndTitle.value, this.ndDescription.value, this.ndIngredients.value, this.ndUrl.value, this.ndPrice.value, categories, allergens);
         }
         event.preventDefault();
         event.stopPropagation();

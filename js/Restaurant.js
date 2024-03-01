@@ -238,8 +238,13 @@ const RestaurantsManager = (function () {
                         // Obtener la categoría existente y el plato existente
                         const actualDish = this.#dishes.get(dish.getName());
 
-                        // Actualizar la información del plato en el mapa de platos
-                        actualDish.dishCategory.push(category);
+                        let estaPresente = actualDish.dishCategory.some(function (element) {
+                            return element.getName() === category.getName()
+                        });
+
+                        if (!estaPresente) {
+                            actualDish.dishCategory.push(category);
+                        }
 
                     }
 
@@ -292,8 +297,15 @@ const RestaurantsManager = (function () {
                     if (this.#dishes.has(dish.getName())) {
                         // Obtener el plato existente
                         const actualDish = this.#dishes.get(dish.getName());
-                        // Actualizar la información de los alérgenos en el mapa dishes
-                        actualDish.dishAllergens.push(allergen);
+
+                        let estaPresente = actualDish.dishAllergens.some(function (element) {
+                            return element.getName() === allergen.getName()
+                        });
+
+                        if (!estaPresente) {
+                            actualDish.dishAllergens.push(allergen);
+                        }
+
                     } else {
                         this.addDish(dish);
                     }

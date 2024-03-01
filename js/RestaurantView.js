@@ -63,7 +63,7 @@ class RestaurantView {
         if (!container) {
             container = document.createElement('ul');
             container.classList.add('dropdown-menu');
-            navCats.appendChild(container);
+            navCats.append(container);
         } else {
             container.innerHTML = ''; // Vacía el contenido existente
         }
@@ -376,8 +376,7 @@ justify-content-center">${message}</div>`);
 
         form.insertAdjacentHTML(
             'beforeend',
-            `
-        <div class="col-md-6 mb-3">
+            `<div class="col-md-6 mb-3">
         <label class="form-label text-white" for="ndSerial">Serial del plato*</label>
         <div class="input-group">
         <span class="input-group-text"><i class="bi bi-type"></i></span>
@@ -444,8 +443,56 @@ justify-content-center">${message}</div>`);
         <div class="invalid-feedback">Debe ser un número decimal positivo con hasta dos decimales.</div>
         <div class="valid-feedback">Correcto.</div>
         </div>
-        </div>
-        <div class="mb-12">
+        </div>`);
+
+        form.insertAdjacentHTML(
+            'beforeend',
+            `<div class= "col-md-3 mb-3" >
+                      <label class="form-label text-white" for="ndCat">Categorias *</label>
+                      <div class="input-group">
+                          <label class="input-group-text" for="ndCat"><i class="bi bi-card-checklist"></i></label>
+                          <select class="form-select" name="ndCat" id="ndCat" multiple required>
+                          <option value="" id="menu"></option></select>
+                          <div class="invalid-feedback">Se debe elegir al menos una categoría.</div>
+                          <div class="valid-feedback">Correcto.</div>
+                      </div>
+                  </div> `
+        );
+
+        const ndCat = form.querySelector('#ndCat');
+        for (const [key, cat] of categories) {
+            ndCat.insertAdjacentHTML(
+                "beforeend",
+                `<option value = "${cat.getName()}" > ${cat.getName()}</option>`
+            );
+        }
+
+        form.insertAdjacentHTML(
+            "beforeend",
+            `<div class= "col-md-3 mb-3" >
+                          <label class="form-label text-white" for="ndAllergens">Alérgenos *</label>
+                          <div class="input-group">
+                              <label class="input-group-text" for="ndAllergens"><i class="bi bi-card-checklist"></i></label>
+                              <select class="form-select" name="ndAllergens" id="ndAllergens" multiple required>
+                              <option value="" id="menu"></option></select>
+                              <div class="invalid-feedback">Se debe elegir al menos una categoría.</div>
+                              <div class="valid-feedback">Correcto.</div>
+                          </div>
+                      </div > `
+        );
+
+        const ndAllergens = form.querySelector('#ndAllergens');
+        for (const [key, allergen] of allergens) {
+            ndAllergens.insertAdjacentHTML(
+                "beforeend",
+                `<option value = "${allergen.getName()}" > ${allergen.getName()}</option>`
+            );
+        }
+
+
+        form.insertAdjacentHTML(
+            'beforeend',
+            `<div class="mb-12">
         <button class="btn btn-primary" type="submit">Enviar</button>
         <button class="btn btn-primary" type="reset">Cancelar</button>
         </div>
@@ -535,10 +582,10 @@ justify-content-center">${message}</div>`);
         form.insertAdjacentHTML(
             "beforeend",
             `<div class= "col-md-3 mb-3" >
-                          <label class="form-label text-white" for="npdishes">Platos *</label>
+                          <label class="form-label text-white" for="ndAllergens">Platos *</label>
                           <div class="input-group">
-                              <label class="input-group-text" for="npdishes"><i class="bi bi-card-checklist"></i></label>
-                              <select class="form-select" name="npdishes" id="npdishes" multiple required>
+                              <label class="input-group-text" for="ndAllergens"><i class="bi bi-card-checklist"></i></label>
+                              <select class="form-select" name="ndAllergens" id="ndAllergens" multiple required>
                               </select>
                               <div class="invalid-feedback">Se debe elegir al menos un plato para el menú.</div>
                               <div class="valid-feedback">Correcto.</div>
@@ -546,9 +593,9 @@ justify-content-center">${message}</div>`);
                       </div > `
         );
 
-        const npdishes = form.querySelector('#npdishes');
+        const ndAllergens = form.querySelector('#ndAllergens');
         for (const [key, dish] of dishes) {
-            npdishes.insertAdjacentHTML(
+            ndAllergens.insertAdjacentHTML(
                 "beforeend",
                 `<option value = "${dish.newDish.getName()}" > ${dish.newDish.getName()}</option>`
             );
@@ -729,7 +776,7 @@ justify-content-center">${message}</div>`);
                 event.preventDefault(); // Evita que el enlace siga su comportamiento predeterminado
                 const category = event.target.getAttribute('data-category'); // Obtener el valor del atributo
                 this[EXCECUTE_HANDLER](
-                    handler(event.target.getAttribute('data-category')), // Pasar el valor del atributo como argumento
+                    handler(event.target.getAttribute('data-category')),
                     [category],
                     '#product-list',
                     { action: 'productsCategoryList', category },
