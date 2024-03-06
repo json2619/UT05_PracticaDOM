@@ -74,9 +74,6 @@ class RestaurantController {
     onLoad = () => {
         this[LOAD_RESTAURANT_OBJECT]();
         this.onAddCategory();
-        this[VIEW].showMenuAllergens(this[MODEL].getAllergens());
-        this.onAddRestaurant();
-        this.onAddMenu();
         this[VIEW].showAdminMenu();
         this[VIEW].bindAdminMenu(this.handleNewDishForm, this.handleRemoveDishForm, this.handleGestMenuForm, this.handleGestCategoryForm, this.handleNewRestaurantForm, this.handleDelCategoryForm);
     };
@@ -91,6 +88,9 @@ class RestaurantController {
     }
 
     onAddCategory = () => {
+        this[VIEW].showMenuAllergens(this[MODEL].getAllergens());
+        this.onAddRestaurant();
+        this.onAddMenu();
         this[VIEW].showMenuCategories(this[MODEL].getCategories());
         this[VIEW].bindProductsCategoryListInMenu(this.handledishesCategoryList);
         this[VIEW].bindProductsAllergenListInMenu(this.handledishesAllergenList);
@@ -209,7 +209,7 @@ class RestaurantController {
                 let dishSelected = this[MODEL].getDish(dish);
                 this[MODEL].assignDishToMenu(menu.newMenu, dishSelected);
             }
-            this.onAddMenu();
+            this.onAddCategory();
             done = true;
         } catch (exception) {
             done = false;
@@ -226,7 +226,7 @@ class RestaurantController {
                 let dishSelected = this[MODEL].getDish(dish);
                 this[MODEL].deassignDishToMenu(menu.newMenu, dishSelected);
             }
-            this.onAddMenu();
+            this.onAddCategory();
             done = true;
         } catch (exception) {
             done = false;
@@ -264,7 +264,7 @@ class RestaurantController {
         try {
             rest = this[MODEL].createRestaurant(name, desc, coord1, coord2, image);
             this[MODEL].addRestaurant(rest);
-            this.onAddRestaurant();
+            this.onAddCategory();
             done = true;
         } catch (exception) {
             done = false;

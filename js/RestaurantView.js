@@ -19,17 +19,6 @@ class RestaurantView {
         event.preventDefault();
     }
 
-    bindInit(handler) {
-        document.getElementById('init').addEventListener('click', (event) => {
-            this[EXCECUTE_HANDLER](handler, [], 'body', { action: 'init' }, '#',
-                event);
-        });
-        document.getElementById('logo').addEventListener('click', (event) => {
-            this[EXCECUTE_HANDLER](handler, [], 'body', { action: 'init' }, '#',
-                event);
-        });
-    }
-
     showCategories(categories) {
         this.categories.replaceChildren();
 
@@ -806,14 +795,27 @@ justify-content-center">${message}</div>`);
         this.categories.append(container);
     }
 
+    // Métodos bind
+
+    bindInit(handler) {
+        document.getElementById('init').addEventListener('click', (event) => {
+            this[EXCECUTE_HANDLER](handler, [], 'body', { action: 'init' }, '#',
+                event);
+        });
+        document.getElementById('logo').addEventListener('click', (event) => {
+            this[EXCECUTE_HANDLER](handler, [], 'body', { action: 'init' }, '#',
+                event);
+        });
+    }
+
     bindProductsCategoryList(handler) {
         const categoryList = document.getElementById('categories');
         const links = categoryList.querySelectorAll('a');
         for (const link of links) {
             link.addEventListener('click', (event) => {
-                const { category } = event.currentTarget.getAttribute('data-type');
+                const category = event.currentTarget.getAttribute('data-type');
                 this[EXCECUTE_HANDLER](
-                    handler(event.currentTarget.getAttribute('data-type')),
+                    handler,
                     [category],
                     '#product-list',
                     { action: 'productsCategoryList', category },
@@ -828,10 +830,10 @@ justify-content-center">${message}</div>`);
         const navCats = document.getElementById('navCats');
         navCats.addEventListener('click', (event) => {
             if (event.target.matches('a')) {
-                event.preventDefault(); // Evita que el enlace siga su comportamiento predeterminado
-                const category = event.target.getAttribute('data-category'); // Obtener el valor del atributo
+                event.preventDefault();
+                const category = event.target.getAttribute('data-category');
                 this[EXCECUTE_HANDLER](
-                    handler(event.target.getAttribute('data-category')),
+                    handler,
                     [category],
                     '#product-list',
                     { action: 'productsCategoryList', category },
@@ -844,38 +846,39 @@ justify-content-center">${message}</div>`);
 
     bindProductsAllergenListInMenu(handler) {
         const navCats = document.getElementById('navCats2');
-        const links = navCats.querySelectorAll('a');
-        for (const link of links) {
-            link.addEventListener('click', (event) => {
-                const { category } = event.currentTarget.getAttribute('data-allergen');
+        navCats.addEventListener('click', (event) => {
+            if (event.target.matches('a')) {
+                event.preventDefault();
+                const allergen = event.target.getAttribute('data-allergen');
                 this[EXCECUTE_HANDLER](
-                    handler(event.currentTarget.getAttribute('data-allergen')),
-                    [category],
+                    handler,
+                    [allergen, handler(allergen)],
                     '#product-list',
-                    { action: 'productsAllergenList', category },
+                    { action: 'productsAllergenList', allergen },
                     '#category-list',
                     event,
                 );
-            });
-        }
+            }
+        });
     }
 
     bindRestaurantListInMenu(handler) {
         const navCats = document.getElementById('navCats3');
-        const links = navCats.querySelectorAll('a');
-        for (const link of links) {
-            link.addEventListener('click', (event) => {
-                const { category } = event.currentTarget.getAttribute('data-restaurant');
+
+        navCats.addEventListener('click', (event) => {
+            if (event.target.matches('a')) {
+                event.preventDefault();
+                const restaurant = event.target.getAttribute('data-restaurant');
                 this[EXCECUTE_HANDLER](
-                    handler(event.currentTarget.getAttribute('data-restaurant')),
-                    [category],
+                    handler,
+                    [restaurant, handler(restaurant)],
                     '#product-list',
-                    { action: 'productsRestaurantList', category },
+                    { action: 'productsRestaurantList', restaurant },
                     '#category-list',
                     event,
                 );
-            });
-        }
+            }
+        });
     }
 
     bindProductsMenuList(handler) {
@@ -883,12 +886,12 @@ justify-content-center">${message}</div>`);
         const links = navCats.querySelectorAll('a');
         for (const link of links) {
             link.addEventListener('click', (event) => {
-                const { category } = event.currentTarget.getAttribute('data-menu');
+                const menu = event.currentTarget.getAttribute('data-menu');
                 this[EXCECUTE_HANDLER](
-                    handler(event.currentTarget.getAttribute('data-menu')),
-                    [category],
+                    handler,
+                    [menu],
                     '#product-list',
-                    { action: 'productsMenuList', category },
+                    { action: 'productsMenuList', menu },
                     '#category-list',
                     event,
                 );
@@ -902,12 +905,12 @@ justify-content-center">${message}</div>`);
         const links = productList.querySelectorAll('a');
         for (const link of links) {
             link.addEventListener('click', (event) => {
-                const { category } = event.currentTarget.getAttribute('data-serial');
+                const product = event.currentTarget.getAttribute('data-serial');
                 this[EXCECUTE_HANDLER](
-                    handler(event.currentTarget.getAttribute('data-serial')),
-                    [category],
+                    handler,
+                    [product],
                     '#product-list',
-                    { action: 'showProducts', category },
+                    { action: 'showProducts', product },
                     '#category-list',
                     event,
                 );

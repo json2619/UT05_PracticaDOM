@@ -1,20 +1,14 @@
 import RestaurantApp from './RestaurantApp.js';
 
-window.addEventListener('popstate', (event) => {
-    if (event.state) {
-        historyActions[event.state.action](event);
-    }
-});
-
 const historyActions = {
     init: () => {
         RestaurantApp.handleInit();
     },
-    productsCategoryList: (event) => RestaurantApp.handledishesCategoryList(event.currentTarget.getAttribute('data-type')),
-    productsAllergenList: (event) => RestaurantApp.handledishesAllergenList(event.currentTarget.getAttribute('data-allergen')),
-    productsRestaurantList: (event) => RestaurantApp.handleRestaurantList(event.currentTarget.getAttribute('data-restaurant')),
-    productsMenuList: (event) => RestaurantApp.handledishesMenuList(event.currentTarget.getAttribute('data-menu')),
-    showProducts: (event) => RestaurantApp.handleShowProduct(event.currentTarget.getAttribute('data-serial')),
+    productsCategoryList: (event) => RestaurantApp.handledishesCategoryList(event.state.category),
+    productsAllergenList: (event) => RestaurantApp.handledishesAllergenList(event.state.allergen),
+    productsRestaurantList: (event) => RestaurantApp.handleRestaurantList(event.state.restaurant),
+    productsMenuList: (event) => RestaurantApp.handledishesMenuList(event.state.menu),
+    showProducts: (event) => RestaurantApp.handleShowProduct(event.state.product),
     newDish: () => RestaurantApp.handleNewDishForm(),
     removeDish: () => RestaurantApp.handleRemoveDishForm(),
     gestMenu: () => RestaurantApp.handleGestMenuForm(),
@@ -22,5 +16,11 @@ const historyActions = {
     newRestaurant: () => RestaurantApp.handleNewRestaurantForm(),
     delCategory: () => RestaurantApp.handleDelCategoryForm(),
 };
+
+window.addEventListener('popstate', (event) => {
+    if (event.state) {
+        historyActions[event.state.action](event);
+    }
+});
 
 history.replaceState({ action: 'init' }, null);
