@@ -844,13 +844,12 @@ justify-content-center">${message}</div>`);
         });
 
         const denyCookieFunction = (event) => {
-            this.categories.replaceChildren();
-            this.categories.insertAdjacentHTML('afterbegin', `<div class="container my3"><div class="alert alert-warning" role="alert">
+            this.dishes.replaceChildren();
+            this.dishes.insertAdjacentHTML('afterbegin', `<div class="container my3"><div class="alert alert-warning" role="alert">
             <strong>Para utilizar esta web es necesario aceptar el uso de
             cookies. Debe recargar la página y aceptar las condicones para seguir
             navegando. Gracias.</strong>
             </div></div>`);
-            this.categories.remove();
         };
         const btnDenyCookie = document.getElementById('btnDenyCookie');
         btnDenyCookie.addEventListener('click', denyCookieFunction);
@@ -909,6 +908,26 @@ type="submit">Acceder</button>
 </div>`;
         this.categories.insertAdjacentHTML('afterbegin', login);
     }
+
+    // Nos muestra un mensaje de que el usuario no es correcto
+    showInvalidUserMessage() {
+        this.main.insertAdjacentHTML('beforeend', `<div class="container my3"><div class="alert alert-warning" role="alert">
+        <strong>El usuario y la contraseña no son válidos. Inténtelo
+        nuevamente.</strong>
+        </div></div>`);
+        document.forms.fLogin.reset();
+        document.forms.fLogin.username.focus();
+    }
+
+    showInvalidUserMessage() {
+        this.main.insertAdjacentHTML('beforeend', `<div class="container my3"><div class="alert alert-warning" role="alert">
+        <strong>El usuario y la contraseña no son válidos. Inténtelo
+        nuevamente.</strong>
+        </div></div>`);
+        document.forms.fLogin.reset();
+        document.forms.fLogin.username.focus();
+    }
+
 
 
     // Métodos bind

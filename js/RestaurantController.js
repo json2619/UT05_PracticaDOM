@@ -81,7 +81,6 @@ class RestaurantController {
 
     onLoad = () => {
         if (getCookie('accetedCookieMessage') !== 'true') {
-            console.log(getCookie('accetedCookieMessage') !== 'true');
             this[VIEW].showCookiesMessage();
         }
         if (getCookie('activeUser')) {
@@ -113,6 +112,10 @@ class RestaurantController {
         this[VIEW].bindProductsAllergenListInMenu(this.handledishesAllergenList);
         this[VIEW].bindProductsMenuList(this.handledishesMenuList);
     };
+
+    onOpenSession() {
+        this.onInit();
+    }
 
     handleInit = () => {
         this.onInit();
@@ -319,8 +322,19 @@ class RestaurantController {
     // manejador que nos permite abrir el formulario de Login
     handleLoginForm = () => {
         this[VIEW].showLogin();
-        //this[VIEW].bindLogin(this.handleLogin);
+        this[VIEW].bindLogin(this.handleLogin);
     };
+
+    // manejador que realiza la validación
+    handleLogin = (username, password) => {
+        if (this[AUTH].validateUser(username, password)) {
+            this[USER] = this[AUTH].getUser(username);
+            // this.onOpenSession();
+        } else {
+            this[VIEW].showInvalidUserMessage();
+        }
+    };
+
 
 }
 
