@@ -195,6 +195,17 @@ const RestaurantsManager = (function () {
                 throw new NonRegisteredObjectException();
             }
 
+            let menus = this.#menus.values();
+
+            for (const menu of menus) {
+                let pos = menu.dishMenuArr.findIndex((element) => element.getName() === dish.getName());
+
+                if (pos !== -1) {
+                    menu.dishMenuArr.splice(pos, 1);
+                    break; // Si se encuentra, salimos del bucle externo
+                }
+            }
+
             this.#dishes.delete(dish.getName());
             return this;
         }

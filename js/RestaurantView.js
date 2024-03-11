@@ -928,6 +928,17 @@ type="submit">Acceder</button>
         document.forms.fLogin.username.focus();
     }
 
+    showAuthUserProfile(user) {
+        const userArea = document.getElementById('userArea');
+        userArea.replaceChildren();
+        userArea.insertAdjacentHTML('afterbegin', `<div class="account d-flex
+        mx-2 flex-column" style="text-align: right">
+        ${user.username} <a id="aCloseSession" href="#">Cerrar sesión</a>
+        </div>
+        <div class="image">
+        <img alt="${user.username}" src="img/user.jpg" />
+        </div>`);
+    }
 
 
     // Métodos bind
@@ -963,10 +974,10 @@ type="submit">Acceder</button>
 
     bindProductsCategoryListInMenu(handler) {
         const navCats = document.getElementById('navCats');
-        navCats.addEventListener('click', (event) => {
-            if (event.target.matches('a')) {
-                event.preventDefault();
-                const category = event.target.getAttribute('data-category');
+        const links = navCats.querySelectorAll('a');
+        for (const link of links) {
+            link.addEventListener('click', (event) => {
+                const category = event.currentTarget.getAttribute('data-category');
                 this[EXCECUTE_HANDLER](
                     handler,
                     [category],
@@ -975,45 +986,45 @@ type="submit">Acceder</button>
                     '#category-list',
                     event,
                 );
-            }
-        });
+            });
+        }
     }
 
     bindProductsAllergenListInMenu(handler) {
         const navCats = document.getElementById('navCats2');
-        navCats.addEventListener('click', (event) => {
-            if (event.target.matches('a')) {
-                event.preventDefault();
-                const allergen = event.target.getAttribute('data-allergen');
+        const links = navCats.querySelectorAll('a');
+        for (const link of links) {
+            link.addEventListener('click', (event) => {
+                const allergen = event.currentTarget.getAttribute('data-allergen');
                 this[EXCECUTE_HANDLER](
                     handler,
-                    [allergen, handler(allergen)],
+                    [allergen],
                     '#product-list',
                     { action: 'productsAllergenList', allergen },
                     '#category-list',
                     event,
                 );
-            }
-        });
+            });
+        }
     }
 
     bindRestaurantListInMenu(handler) {
         const navCats = document.getElementById('navCats3');
-
-        navCats.addEventListener('click', (event) => {
-            if (event.target.matches('a')) {
-                event.preventDefault();
-                const restaurant = event.target.getAttribute('data-restaurant');
+        const links = navCats.querySelectorAll('a');
+        for (const link of links) {
+            link.addEventListener('click', (event) => {
+                const restaurant = event.currentTarget.getAttribute('data-restaurant');
                 this[EXCECUTE_HANDLER](
                     handler,
-                    [restaurant, handler(restaurant)],
+                    [restaurant],
                     '#product-list',
                     { action: 'productsRestaurantList', restaurant },
                     '#category-list',
                     event,
                 );
-            }
-        });
+            });
+        }
+
     }
 
     bindProductsMenuList(handler) {
@@ -1174,6 +1185,10 @@ type="submit">Acceder</button>
             handler(form.username.value, form.password.value);
             event.preventDefault();
         });
+    }
+
+    initHistory() {
+        history.replaceState({ action: 'init' }, null);
     }
 
 

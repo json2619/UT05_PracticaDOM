@@ -90,31 +90,31 @@ class RestaurantController {
         }
         this[LOAD_RESTAURANT_OBJECT]();
         this.onAddCategory();
-        this[VIEW].showAdminMenu();
-        this[VIEW].bindAdminMenu(this.handleNewDishForm, this.handleRemoveDishForm, this.handleGestMenuForm, this.handleGestCategoryForm, this.handleNewRestaurantForm, this.handleDelCategoryForm);
     };
 
     onInit = () => {
+        this[VIEW].bindMenuEvents();
         this[VIEW].showCategories(this[MODEL].getCategories());
-        this[VIEW].showDishes(this[MODEL].getDishes());
         this[VIEW].bindProductsCategoryList(this.handledishesCategoryList);
-        this[VIEW].bindRestaurantListInMenu(this.handleRestaurantList);
-        this[VIEW].bindProductsAllergenListInMenu(this.handledishesAllergenList);
-        this[VIEW].bindProductsMenuList(this.handledishesMenuList);
     }
 
     onAddCategory = () => {
         this[VIEW].showMenuAllergens(this[MODEL].getAllergens());
+        this[VIEW].showDishes(this[MODEL].getDishes());
         this.onAddRestaurant();
         this.onAddMenu();
         this[VIEW].showMenuCategories(this[MODEL].getCategories());
         this[VIEW].bindProductsCategoryListInMenu(this.handledishesCategoryList);
         this[VIEW].bindProductsAllergenListInMenu(this.handledishesAllergenList);
         this[VIEW].bindProductsMenuList(this.handledishesMenuList);
+        this[VIEW].bindRestaurantListInMenu(this.handleRestaurantList);
     };
 
     onOpenSession() {
         this.onInit();
+        this[VIEW].initHistory();
+        this[VIEW].showAdminMenu();
+        this[VIEW].bindAdminMenu(this.handleNewDishForm, this.handleRemoveDishForm, this.handleGestMenuForm, this.handleGestCategoryForm, this.handleNewRestaurantForm, this.handleDelCategoryForm);
     }
 
     handleInit = () => {
@@ -329,7 +329,7 @@ class RestaurantController {
     handleLogin = (username, password) => {
         if (this[AUTH].validateUser(username, password)) {
             this[USER] = this[AUTH].getUser(username);
-            // this.onOpenSession();
+            this.onOpenSession();
         } else {
             this[VIEW].showInvalidUserMessage();
         }
