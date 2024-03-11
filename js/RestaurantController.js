@@ -2,15 +2,23 @@ import {
     Allergen, Category, Coordinate, Dish, Menu, Restaurant,
 } from "./Restaurant.js";
 
+import { getCookie } from './util.js';
+
 const MODEL = Symbol('restaurant');
 const VIEW = Symbol('restaurantView');
 const LOAD_RESTAURANT_OBJECT = Symbol('Load Restaurant Objects');
+const AUTH = Symbol('AUTH');
+const USER = Symbol('USER');
+
 
 
 class RestaurantController {
-    constructor(model, view) {
+    constructor(model, view, auth) {
         this[MODEL] = model;
         this[VIEW] = view;
+        this[AUTH] = auth;
+        this[USER] = null;
+
 
         this.onLoad();
         this.onInit();
@@ -72,6 +80,15 @@ class RestaurantController {
     }
 
     onLoad = () => {
+        if (getCookie('accetedCookieMessage') !== 'true') {
+            console.log(getCookie('accetedCookieMessage') !== 'true');
+            this[VIEW].showCookiesMessage();
+        }
+        if (getCookie('activeUser')) {
+        } else {
+            this[VIEW].showIdentificationLink();
+            this[VIEW].bindIdentificationLink(this.handleLoginForm);
+        }
         this[LOAD_RESTAURANT_OBJECT]();
         this.onAddCategory();
         this[VIEW].showAdminMenu();
@@ -298,6 +315,13 @@ class RestaurantController {
     onAddRestaurant = () => {
         this[VIEW].showMenuRestaurants(this[MODEL].getRestaurants());
     };
+
+    // manejador que nos permite abrir el formulario de Login
+    handleLoginForm = () => {
+        this[VIEW].showLogin();
+        //this[VIEW].bindLogin(this.handleLogin);
+    };
+
 }
 
 export default RestaurantController;

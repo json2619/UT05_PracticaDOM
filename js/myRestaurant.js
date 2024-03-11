@@ -15,6 +15,7 @@ const historyActions = {
     gestcategory: () => RestaurantApp.handleGestCategoryForm(),
     newRestaurant: () => RestaurantApp.handleNewRestaurantForm(),
     delCategory: () => RestaurantApp.handleDelCategoryForm(),
+    login: () => RestaurantApp.handleLoginForm(),
 };
 
 window.addEventListener('popstate', (event) => {

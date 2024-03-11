@@ -1,4 +1,7 @@
 import { newDishValidation, gestMenuValidation, gestCategoryValidation, newRestaurantValidation, DelCategoryValidation } from './validation.js';
+import { setCookie } from './util.js';
+
+
 const EXCECUTE_HANDLER = Symbol('excecuteHandler');
 
 class RestaurantView {
@@ -160,6 +163,7 @@ class RestaurantView {
 
     listProducts(dishes, title) {
         this.categories.replaceChildren();
+        this.products.replaceChildren();
 
         if (this.categories.children.length > 1)
             this.categories.children[1].remove();
@@ -795,6 +799,118 @@ justify-content-center">${message}</div>`);
         this.categories.append(container);
     }
 
+    // Mensaje de que estamos usando una cookie
+    showCookiesMessage() {
+        const toast = `<div class="fixed-top p-5 mt-5">
+        <div id="cookies-message" class="toast fade show bg-dark text-white
+        w-100 mw-100" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="toast-header">
+        <h4 class="me-auto">Aviso de uso de cookies</h4>
+        <button type="button" class="btn-close" data-bs-dismiss="toast"
+        aria-label="Close" id="btnDismissCookie"></button>
+        </div>
+        <div class="toast-body p-4 d-flex flex-column">
+        <p>
+        Este sitio web almacenda datos en cookies para activar su
+        funcionalidad, entre las que se encuentra
+        datos analíticos y personalización. Para poder utilizar este
+        sitio, estás automáticamente aceptando
+        que
+        utilizamos cookies.
+        </p>
+        <div class="ml-auto">
+        <button type="button" class="btn btn-outline-light mr-3 deny"
+        id="btnDenyCookie" data-bs-dismiss="toast">
+        Denegar
+        </button>
+        <button type="button" class="btn btn-primary"
+        id="btnAcceptCookie" data-bs-dismiss="toast">
+        Aceptar
+        </button>
+        </div>
+        </div>
+        </div>
+        </div>`;
+        document.body.insertAdjacentHTML('afterbegin', toast);
+
+        const cookiesMessage = document.getElementById('cookies-message');
+        cookiesMessage.addEventListener('hidden.bs.toast', (event) => {
+            event.currentTarget.parentElement.remove();
+        });
+
+        const btnAcceptCookie = document.getElementById('btnAcceptCookie');
+        btnAcceptCookie.addEventListener('click', (event) => {
+            setCookie('accetedCookieMessage', 'true', 1);
+        });
+
+        const denyCookieFunction = (event) => {
+            this.categories.replaceChildren();
+            this.categories.insertAdjacentHTML('afterbegin', `<div class="container my3"><div class="alert alert-warning" role="alert">
+            <strong>Para utilizar esta web es necesario aceptar el uso de
+            cookies. Debe recargar la página y aceptar las condicones para seguir
+            navegando. Gracias.</strong>
+            </div></div>`);
+            this.categories.remove();
+        };
+        const btnDenyCookie = document.getElementById('btnDenyCookie');
+        btnDenyCookie.addEventListener('click', denyCookieFunction);
+        const btnDismissCookie = document.getElementById('btnDismissCookie');
+        btnDismissCookie.addEventListener('click', denyCookieFunction);
+    }
+
+    // Método que nos enseña el botón para identificarnos
+    showIdentificationLink() {
+        const userArea = document.getElementById('userArea');
+        userArea.replaceChildren();
+        userArea.insertAdjacentHTML('afterbegin', `<div class="account d-flex
+        mx-2 flex-column" style="text-align: right; height: 40px">
+        <a id="login" href="#"><i class="bi bi-person-circle" ariahidden="true"></i> Identificate</a>
+        </div>`);
+    }
+
+    // Método que muestra el formulario de Login
+    showLogin() {
+        this.categories.replaceChildren();
+        const login = `<div class="container h-100">
+        <div class="d-flex justify-content-center h-100">
+        <div class="user_card">
+        <div class="d-flex justify-content-center form_container">
+        <form name="fLogin" role="form" novalidate>
+        <div class="input-group mb-3">
+        <div class="input-group-append">
+        <span class="input-group-text"><i class="bi bi-personcircle"></i></span>
+        </div>
+        <input type="text" name="username" class="form-control
+        input_user" value="" placeholder="usuario">
+        </div>
+        <div class="input-group mb-2">
+        <div class="input-group-append">
+        <span class="input-group-text"><i class="bi bi-keyfill"></i></span>
+        </div>
+        <input type="password" name="password" class="form-control
+        input_pass" value="" placeholder="contraseña">
+        </div>
+        <div class="form-group">
+        <div class="custom-control custom-checkbox">
+        <input name="remember" type="checkbox" class="customcontrol-input" id="customControlInline">
+        <label class="custom-control-label"
+for="customControlInline">Recuerdame</label>
+</div>
+</div>
+<div class="d-flex justify-content-center mt-3
+login_container">
+<button class="btn login_btn"
+type="submit">Acceder</button>
+</div>
+</form>
+</div>
+</div>
+</div>
+</div>`;
+        this.categories.insertAdjacentHTML('afterbegin', login);
+    }
+
+
     // Métodos bind
 
     bindInit(handler) {
@@ -1021,6 +1137,24 @@ justify-content-center">${message}</div>`);
 
     bindDelCatgory(handler) {
         DelCategoryValidation(handler);
+    }
+
+    // Bind que dota de funcionalidad al showIdentificationLink
+    bindIdentificationLink(handler) {
+        const login = document.getElementById('login');
+        login.addEventListener('click', (event) => {
+            this[EXCECUTE_HANDLER](handler, [], 'main', { action: 'login' }, '#',
+                event);
+        });
+    }
+
+    //Dota de funcionalidad al formulario
+    bindLogin(handler) {
+        const form = document.forms.fLogin;
+        form.addEventListener('submit', (event) => {
+            handler(form.username.value, form.password.value);
+            event.preventDefault();
+        });
     }
 
 
