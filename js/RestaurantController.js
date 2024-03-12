@@ -9,6 +9,7 @@ const VIEW = Symbol('restaurantView');
 const LOAD_RESTAURANT_OBJECT = Symbol('Load Restaurant Objects');
 const AUTH = Symbol('AUTH');
 const USER = Symbol('USER');
+const FAVDISHES = Symbol('FAVDISHES');
 
 
 
@@ -18,6 +19,7 @@ class RestaurantController {
         this[VIEW] = view;
         this[AUTH] = auth;
         this[USER] = null;
+        this[FAVDISHES] = [];
 
 
         this.onLoad();
@@ -83,10 +85,15 @@ class RestaurantController {
         if (getCookie('accetedCookieMessage') !== 'true') {
             this[VIEW].showCookiesMessage();
         }
-        if (getCookie('activeUser')) {
+        const userCookie = getCookie('activeUser');
+        if (userCookie) {
+            const user = this[AUTH].getUser(userCookie);
+            if (user) {
+                this[USER] = user;
+                this.onOpenSession();
+            }
         } else {
-            this[VIEW].showIdentificationLink();
-            this[VIEW].bindIdentificationLink(this.handleLoginForm);
+            this.onCloseSession();
         }
         this[LOAD_RESTAURANT_OBJECT]();
         this.onAddCategory();
@@ -100,7 +107,6 @@ class RestaurantController {
 
     onAddCategory = () => {
         this[VIEW].showMenuAllergens(this[MODEL].getAllergens());
-        this[VIEW].showDishes(this[MODEL].getDishes());
         this.onAddRestaurant();
         this.onAddMenu();
         this[VIEW].showMenuCategories(this[MODEL].getCategories());
@@ -108,18 +114,33 @@ class RestaurantController {
         this[VIEW].bindProductsAllergenListInMenu(this.handledishesAllergenList);
         this[VIEW].bindProductsMenuList(this.handledishesMenuList);
         this[VIEW].bindRestaurantListInMenu(this.handleRestaurantList);
+        this[VIEW].showDishes(this[MODEL].getDishes());
     };
 
     onOpenSession() {
         this.onInit();
         this[VIEW].initHistory();
+        this[VIEW].showAuthUserProfile(this[USER]);
+        this[VIEW].showDishFavMenu();
+        this[VIEW].bindDishFav(this.handleDisHFav);
+        this[VIEW].bindCloseSession(this.handleCloseSession);
         this[VIEW].showAdminMenu();
         this[VIEW].bindAdminMenu(this.handleNewDishForm, this.handleRemoveDishForm, this.handleGestMenuForm, this.handleGestCategoryForm, this.handleNewRestaurantForm, this.handleDelCategoryForm);
+    }
+
+    onCloseSession() {
+        this[USER] = null;
+        this[VIEW].deleteUserCookie();
+        this[VIEW].showIdentificationLink();
+        this[VIEW].bindIdentificationLink(this.handleLoginForm);
+        this[VIEW].removeAdminMenu();
     }
 
     handleInit = () => {
         this.onInit();
     }
+
+
 
     handledishesCategoryList = (title) => {
         const category = this[MODEL].getCategory(title)
@@ -151,6 +172,7 @@ class RestaurantController {
             const dish = this[MODEL].getDish(dishName);
             this[VIEW].showProducts(dish);
             this[VIEW].bindShowProductInNewWindow(this.handleShowProductInNewWindow);
+            this[VIEW].bindAddDishToFav(this.handleAddDishToFav);
         } catch (error) {
             this[VIEW].showProducts(null, 'No existe este producto en la página.');
         }
@@ -326,14 +348,81 @@ class RestaurantController {
     };
 
     // manejador que realiza la validación
-    handleLogin = (username, password) => {
+    handleLogin = (username, password, remember) => {
         if (this[AUTH].validateUser(username, password)) {
             this[USER] = this[AUTH].getUser(username);
             this.onOpenSession();
+            if (remember) {
+                this[VIEW].setUserCookie(this[USER]);
+            }
+
         } else {
             this[VIEW].showInvalidUserMessage();
         }
     };
+
+    // Manejador que cerrara la sesión
+    handleCloseSession = () => {
+        this.onCloseSession();
+        this.onInit();
+        this[VIEW].initHistory();
+    };
+
+    // Manejador con el que añadiremos los platos a favoritos para un usuario en concreto
+    handleAddDishToFav = (dishName) => {
+        let done;
+        let err;
+
+
+        // Si existe un usuario registrado, añadimos el plato a la lista de favoritos para ese usuario
+        if (this[USER]) {
+
+            // Si existe un localStorage obtenemos los platos
+            if (localStorage.getItem("favDishes")) {
+                this[FAVDISHES] = JSON.parse(localStorage.getItem("favDishes"));
+            }
+
+            // Si la lista ya contiene el plato lanzamos error
+            if (this[FAVDISHES].includes(dishName)) {
+                // Indicamos que no se ha realizado correctamente
+                done = false;
+            } else {
+                // Añadimos el plato al array
+                this[FAVDISHES].push(dishName);
+                // Añadimos al localStorage el array con los platos favoritos
+                localStorage.setItem("favDishes", JSON.stringify(this[FAVDISHES]));
+                // Indicamos que se ha realizado correctamente
+                done = true;
+            }
+        }
+    }
+
+    // Manejador para mostrar los platos favoritos que tenemos almacenados en nuestro localStorage
+    handleDisHFav = () => {
+        // Obtenemos los platos que tenemos almacenados en el localStorage
+        const dishStorage = JSON.parse(localStorage.getItem("favDishes"));
+
+        console.log(dishStorage);
+
+        // Array donde guardaremos los platos que tenemos almacenados
+        const dishes = [];
+
+        // Recorremos los platos que tenemos almacenados
+        for (const d of dishStorage) {
+            console.log(d);
+            // Obtenemos los platos
+            const dish = this[MODEL].getDish(d);
+            // Metemos los platos en el array
+            dishes.push(dish);
+        }
+
+        // Mostramos al usuario desde la vista todos los platos que tiene marcados como favoritos
+        this[VIEW].listProducts(
+            dishes,
+            "Platos favoritos"
+        );
+        this[VIEW].bindShowProduct(this.handleShowProduct);
+    }
 
 
 }

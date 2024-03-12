@@ -61,7 +61,7 @@ class RestaurantView {
         }
 
         for (const [name, value] of categories) {
-            container.insertAdjacentHTML('beforeend', `<li><a data-category="${value.getName()}" class="dropdown-item" href="#productlist">${value.getName()}</a></li>`);
+            container.insertAdjacentHTML('beforeend', `<li><a data-category="${value.getName()}" class="dropdown-item" href="#produc-tlist">${value.getName()}</a></li>`);
         }
 
         navCats.append(container);
@@ -106,27 +106,23 @@ class RestaurantView {
     }
 
     showAdminMenu() {
-        let existingDropdown = document.getElementById('navServices');
-
-        if (!existingDropdown) {
-            const menuOption = document.createElement('li');
-            menuOption.classList.add('menu_nav');
-            menuOption.classList.add('nav-item');
-            menuOption.classList.add('dropdown');
-            menuOption.insertAdjacentHTML(
-                'beforeend',
-                `<a class="nav-link dropdown-toggle" href="#" id="navServices" role="button" data-bs-toggle="dropdown" aria-expanded="false">Adminitración</a>`);
-            const suboptions = document.createElement('ul');
-            suboptions.classList.add('dropdown-menu');
-            suboptions.insertAdjacentHTML('beforeend', '<li><a id="lnewdish" class= "dropdown-item" href = "#new-dish" > Crear plato</a ></li > ');
-            suboptions.insertAdjacentHTML('beforeend', '<li><a id="ldeldish" class= "dropdown-item" href = "#del-dish" > Eliminar plato</a ></li > ');
-            suboptions.insertAdjacentHTML('beforeend', '<li><a id="lgestmenu" class= "dropdown-item" href = "#gest-menu" >Gestión Menú</a ></li > ');
-            suboptions.insertAdjacentHTML('beforeend', '<li><a id="lgestcat" class= "dropdown-item" href = "#gest-cat" >Gestión Categorias</a ></li > ');
-            suboptions.insertAdjacentHTML('beforeend', '<li><a id="lnewrest" class= "dropdown-item" href = "#new-rest" >Crear Restaurante</a ></li > ');
-            suboptions.insertAdjacentHTML('beforeend', '<li><a id="ldelcat" class= "dropdown-item" href = "#del-cat" >Eliminar Categoría</a ></li > ');
-            menuOption.append(suboptions);
-            this.nav.append(menuOption);
-        }
+        const menuOption = document.createElement('li');
+        menuOption.classList.add('menu_nav');
+        menuOption.classList.add('nav-item');
+        menuOption.classList.add('dropdown');
+        menuOption.insertAdjacentHTML(
+            'beforeend',
+            `<a class="nav-link dropdown-toggle" href="#" id="adminMenu" role="button" data-bs-toggle="dropdown" aria-expanded="false">Adminitración</a>`);
+        const suboptions = document.createElement('ul');
+        suboptions.classList.add('dropdown-menu');
+        suboptions.insertAdjacentHTML('beforeend', '<li><a id="lnewdish" class= "dropdown-item" href = "#new-dish" > Crear plato</a ></li > ');
+        suboptions.insertAdjacentHTML('beforeend', '<li><a id="ldeldish" class= "dropdown-item" href = "#del-dish" > Eliminar plato</a ></li > ');
+        suboptions.insertAdjacentHTML('beforeend', '<li><a id="lgestmenu" class= "dropdown-item" href = "#gest-menu" >Gestión Menú</a ></li > ');
+        suboptions.insertAdjacentHTML('beforeend', '<li><a id="lgestcat" class= "dropdown-item" href = "#gest-cat" >Gestión Categorias</a ></li > ');
+        suboptions.insertAdjacentHTML('beforeend', '<li><a id="lnewrest" class= "dropdown-item" href = "#new-rest" >Crear Restaurante</a ></li > ');
+        suboptions.insertAdjacentHTML('beforeend', '<li><a id="ldelcat" class= "dropdown-item" href = "#del-cat" >Eliminar Categoría</a ></li > ');
+        menuOption.append(suboptions);
+        this.nav.append(menuOption);
     }
 
 
@@ -229,7 +225,10 @@ class RestaurantView {
                 <h6 class="text-uppercase">Características</h6>
                 </div>
                 <div class="cart mt-4 align-items-center"> <button dataserial="${dish.getName()}" class="btn btn-primary text-uppercase mr-2 px4">Comprar</button> 
-                <button id="b-open" data-serial="${dish.getName()}" class="btn btnprimary text-uppercase mr-2 px-4">Abrir en nueva ventana</button>
+                <button id="b-open" data-serial="${dish.getName()}" 
+                class="btn btnprimary text-uppercase mr-2 px-4">Abrir en nueva ventana</button>
+                <button button id="dish-fav" data-dish="${dish.getName()}" 
+                class="btn btnprimary text-uppercase mr-2 px-4 text-white red">⭐️</button>
                 </div>
                 </div>
                 </div>
@@ -932,16 +931,20 @@ type="submit">Acceder</button>
         const userArea = document.getElementById('userArea');
         userArea.replaceChildren();
         userArea.insertAdjacentHTML('afterbegin', `<div class="account d-flex
-        mx-2 flex-column" style="text-align: right">
+        mx-2 flex-column" style="text-align: right; color: white">
         ${user.username} <a id="aCloseSession" href="#">Cerrar sesión</a>
-        </div>
-        <div class="image">
-        <img alt="${user.username}" src="img/user.jpg" />
         </div>`);
     }
 
+    removeAdminMenu() {
+        const adminMenu = document.getElementById('adminMenu');
+        if (adminMenu) adminMenu.parentElement.remove();
+    }
+
+
 
     // Métodos bind
+
 
     bindInit(handler) {
         document.getElementById('init').addEventListener('click', (event) => {
@@ -1182,15 +1185,79 @@ type="submit">Acceder</button>
     bindLogin(handler) {
         const form = document.forms.fLogin;
         form.addEventListener('submit', (event) => {
-            handler(form.username.value, form.password.value);
+            handler(form.username.value, form.password.value, form.remember.checked);
             event.preventDefault();
         });
     }
+
+    bindCloseSession(handler) {
+        document.getElementById('aCloseSession').addEventListener('click',
+            (event) => {
+                handler();
+                event.preventDefault();
+            });
+    }
+
 
     initHistory() {
         history.replaceState({ action: 'init' }, null);
     }
 
+    setUserCookie(user) {
+        setCookie('activeUser', user.username, 1);
+    }
+
+    deleteUserCookie() {
+        setCookie('activeUser', '', 0);
+    }
+
+    bindAddDishToFav(handler) {
+        // Recogemos el boton
+        const btnAddFav = document.getElementById("dish-fav");
+        // Capturamos el evento click
+        btnAddFav.addEventListener("click", (event) => {
+            // Recogemos el nombre del plato
+            const { dish } = event.currentTarget.dataset;
+            // Le pasamos al handler el plato
+            handler(dish);
+        });
+    }
+
+    // Metodo con el que mostraremos nuestro menu de administracion
+    showDishFavMenu() {
+        // Creamos los elementos de nuestro dropdown
+        const itemMenu = document.createElement("li");
+        // Le añadimos las clases pertinentes
+        itemMenu.classList.add("nav-item", "dropdown", "nav_li", "menu_nav");
+        // Creamos el elemento html que insertaremos en nuestro menu
+        itemMenu.insertAdjacentHTML(
+            "beforeend",
+            `
+            <a class="nav-link text-white" 
+                href="#" id="dishFavs" role="button" aria-expanded="false">Platos favoritos</a>
+                `
+        );
+
+        // Añadimos el elemento a nuestra lista
+        this.nav.append(itemMenu);
+    }
+
+    // Creamos el bind con el que le añadiremos funcionlidad cunado se pulse el enlace de platos favoritos
+    bindDishFav(handler) {
+        // Recogemos el enlace que tendremos que pulsar para que se muestren
+        const btn = document.getElementById("dishFavs");
+        // Capturamos el evento click del boton
+        btn.addEventListener("click", (event) => {
+            this[EXCECUTE_HANDLER](
+                handler,
+                [],
+                "#dish-list",
+                { action: "dishFav" },
+                "#",
+                event
+            );
+        });
+    }
 
 }
 export default RestaurantView;
