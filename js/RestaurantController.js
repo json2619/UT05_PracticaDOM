@@ -100,12 +100,12 @@ class RestaurantController {
     };
 
     onInit = () => {
-        this[VIEW].bindMenuEvents();
         this[VIEW].showCategories(this[MODEL].getCategories());
         this[VIEW].bindProductsCategoryList(this.handledishesCategoryList);
     }
 
     onAddCategory = () => {
+        this[VIEW].bindMenuEvents();
         this[VIEW].showMenuAllergens(this[MODEL].getAllergens());
         this.onAddRestaurant();
         this.onAddMenu();
@@ -134,6 +134,7 @@ class RestaurantController {
         this[VIEW].showIdentificationLink();
         this[VIEW].bindIdentificationLink(this.handleLoginForm);
         this[VIEW].removeAdminMenu();
+        this[VIEW].removeDishFavMenu();
     }
 
     handleInit = () => {

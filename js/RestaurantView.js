@@ -941,6 +941,11 @@ type="submit">Acceder</button>
         if (adminMenu) adminMenu.parentElement.remove();
     }
 
+    removeDishFavMenu() {
+        const favMenu = document.getElementById('favoritos');
+        if (favMenu) favMenu.remove();
+    }
+
 
 
     // Métodos bind
@@ -1225,8 +1230,9 @@ type="submit">Acceder</button>
 
     // Metodo con el que mostraremos nuestro menu de administracion
     showDishFavMenu() {
-        // Creamos los elementos de nuestro dropdown
         const itemMenu = document.createElement("li");
+
+        itemMenu.id = "favoritos";
         // Le añadimos las clases pertinentes
         itemMenu.classList.add("nav-item", "dropdown", "nav_li", "menu_nav");
         // Creamos el elemento html que insertaremos en nuestro menu
@@ -1241,7 +1247,6 @@ type="submit">Acceder</button>
         // Añadimos el elemento a nuestra lista
         this.nav.append(itemMenu);
     }
-
     // Creamos el bind con el que le añadiremos funcionlidad cunado se pulse el enlace de platos favoritos
     bindDishFav(handler) {
         // Recogemos el enlace que tendremos que pulsar para que se muestren
