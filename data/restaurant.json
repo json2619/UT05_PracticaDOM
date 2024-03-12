@@ -1,0 +1,187 @@
+{
+  "categories": [
+    {
+      "name": "Entrantes",
+      "description": "Es un plato de comida que puede consumirse como 1er plato un plato de menor cantidad de comida que el plato principal.",
+      "image": "img/categorias/entrada.jpg"
+    },
+    {
+      "name": "Sopas",
+      "description": "Son preparaciones culinarias consistentes en un líquido con sustancia y mucho sabor. En algunos casos poseen ingredientes sólidos.",
+      "image": "img/categorias/sopa.jpg"
+    },
+    {
+      "name": "Ensaladas",
+      "description": "Las ensaladas pueden estar compuestas de verduras, frutas y/o proteínas. Pueden tener ingredientes crudos y/o cocidos.",
+      "image": "img/categorias/ensalada.jpg"
+    }
+  ],
+  "allergens": [
+    { "name": "Allergen1", "description": "Description 1" },
+    { "name": "Allergen2", "description": "Description 2" },
+    { "name": "Allergen3", "description": "Description 3" },
+    { "name": "Allergen4", "description": "Description 4" }
+  ],
+  "dishes": [
+    {
+      "id": "1",
+      "name": "Entrante1",
+      "description": "Descripción del Entrante 1",
+      "ingredients": "Ingrediente1, Ingrediente2",
+      "image": "img/platos/entrante1.jpg",
+      "price": 10.99,
+      "category": "Entrantes",
+      "menu": ["Menu1"],
+      "allergens": ["Allergen1", "Allergen2", "Allergen3", "Allergen4"]
+    },
+    {
+      "id": "2",
+      "name": "Entrante2",
+      "description": "Descripción del Entrante 2",
+      "ingredients": "Ingrediente3, Ingrediente4",
+      "image": "img/platos/entrante2.jpg",
+      "price": 12.99,
+      "category": "Entrantes",
+      "menu": ["Menu2"],
+      "allergens": ["Allergen1", "Allergen2", "Allergen3", "Allergen4"]
+    },
+    {
+      "id": "3",
+      "name": "Entrante3",
+      "description": "Descripción del Entrante 3",
+      "ingredients": "Ingrediente5, Ingrediente6",
+      "image": "img/platos/entrante3.jpg",
+      "price": 9.99,
+      "category": "Entrantes",
+      "menu": ["Menu1"],
+      "allergens": ["Allergen1", "Allergen2", "Allergen3", "Allergen4"]
+    },
+    {
+      "id": "4",
+      "name": "Entrante4",
+      "description": "Descripción del Entrante 4",
+      "ingredients": "Ingrediente7, Ingrediente8",
+      "image": "img/platos/entrante4.jpg",
+      "price": 11.99,
+      "category": "Entrantes",
+      "menu": ["Menu2"],
+      "allergens": ["Allergen1", "Allergen2", "Allergen3", "Allergen4"]
+    },
+    {
+      "id": "5",
+      "name": "Ensalada1",
+      "description": "Descripción de la Ensalada 1",
+      "ingredients": "Ingrediente9, Ingrediente10",
+      "image": "img/platos/ensalada1.jpg",
+      "price": 8.99,
+      "category": "Ensaladas",
+      "menu": ["Menu3"],
+      "allergens": ["Allergen1", "Allergen2", "Allergen3", "Allergen4"]
+    },
+    {
+      "id": "6",
+      "name": "Ensalada2",
+      "description": "Descripción de la Ensalada 2",
+      "ingredients": "Ingrediente11, Ingrediente12",
+      "image": "img/platos/ensalada2.jpg",
+      "price": 7.99,
+      "category": "Ensaladas",
+      "menu": ["Menu2"],
+      "allergens": ["Allergen1", "Allergen2", "Allergen3", "Allergen4"]
+    },
+    {
+      "id": "7",
+      "name": "Ensalada3",
+      "description": "Descripción de la Ensalada 3",
+      "ingredients": "Ingrediente13, Ingrediente14",
+      "image": "img/platos/ensalada3.jpg",
+      "price": 10.99,
+      "category": "Ensaladas",
+      "menu": ["Menu1"],
+      "allergens": ["Allergen1", "Allergen2", "Allergen3", "Allergen4"]
+    },
+    {
+      "id": "8",
+      "name": "Ensalada4",
+      "description": "Descripción de la Ensalada 4",
+      "ingredients": "Ingrediente15, Ingrediente16",
+      "image": "img/platos/ensalada4.jpg",
+      "price": 9.99,
+      "category": "Ensaladas",
+      "menu": ["Menu2"],
+      "allergens": ["Allergen1", "Allergen2", "Allergen3", "Allergen4"]
+    },
+    {
+      "id": "9",
+      "name": "Sopa1",
+      "description": "Descripción de la Sopa 1",
+      "ingredients": "Ingrediente17, Ingrediente18",
+      "image": "img/platos/sopa1.jpg",
+      "price": 6.99,
+      "category": "Sopas",
+      "menu": ["Menu3"],
+      "allergens": ["Allergen1", "Allergen2", "Allergen3", "Allergen4"]
+    },
+    {
+      "id": "10",
+      "name": "Sopa2",
+      "description": "Descripción de la Sopa 2",
+      "ingredients": "Ingrediente19, Ingrediente20",
+      "image": "img/platos/sopa2.jpg",
+      "price": 5.99,
+      "category": "Sopas",
+      "menu": ["Menu1"],
+      "allergens": ["Allergen1", "Allergen2", "Allergen3", "Allergen4"]
+    },
+    {
+      "id": "11",
+      "name": "Sopa3",
+      "description": "Descripción de la Sopa 3",
+      "ingredients": "Ingrediente21, Ingrediente22",
+      "image": "img/platos/sopa3.jpg",
+      "price": 8.99,
+      "category": "Sopas",
+      "menu": ["Menu3"],
+      "allergens": ["Allergen1", "Allergen2", "Allergen3", "Allergen4"]
+    },
+    {
+      "id": "12",
+      "name": "Sopa4",
+      "description": "Descripción de la Sopa 4",
+      "ingredients": "Ingrediente23, Ingrediente24",
+      "image": "img/platos/sopa4.jpg",
+      "price": 7.99,
+      "category": "Sopas",
+      "menu": ["Menu3"],
+      "allergens": ["Allergen1", "Allergen2", "Allergen3", "Allergen4"]
+    }
+  ],
+  "menus": [
+    { "name": "Menu1", "description": "Menu Description 1" },
+    { "name": "Menu2", "description": "Menu Description 2" },
+    { "name": "Menu3", "description": "Menu Description 3" }
+  ],
+  "restaurants": [
+    {
+      "name": "Restaurant1",
+      "description": "Restaurant Description 1",
+      "latitud": "162",
+      "longitud": "120",
+      "image": "img/restaurante/restaurante1.jpg"
+    },
+    {
+      "name": "Restaurant2",
+      "description": "Restaurant Description 2",
+      "latitud": "138",
+      "longitud": "159",
+      "image": "img/restaurante/restaurante2.jpeg"
+    },
+    {
+      "name": "Restaurant3",
+      "description": "Restaurant Description 3",
+      "latitud": "192",
+      "longitud": "125",
+      "image": "img/restaurante/restaurante3.jpeg"
+    }
+  ]
+}

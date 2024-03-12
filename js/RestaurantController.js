@@ -28,7 +28,7 @@ class RestaurantController {
         this[VIEW].bindInit(this.handleInit);
     }
 
-    [LOAD_RESTAURANT_OBJECT]() {
+    /*[LOAD_RESTAURANT_OBJECT]() {
         const category1 = this[MODEL].createCategory('Entrantes', 'Es un plato de comida que puede consumirse como 1er plato un plato de menor cantidad de comida que el plato principal.', 'img/categorias/entrada.jpg');
         const category2 = this[MODEL].createCategory('Sopas', 'Son preparaciones culinarias consistentes en un líquido con sustancia y mucho sabor. En algunos casos poseen ingredientes sólido.', 'img/categorias/sopa.jpg');
         const category3 = this[MODEL].createCategory('Ensaladas', 'Las ensaladas pueden estar compuestas de verduras, frutas y/o proteínas. Pueden tener ingredientes crudos y/o cocidos.', 'img/categorias/ensalada.jpg');
@@ -79,24 +79,116 @@ class RestaurantController {
 
         this[MODEL].assignDishToMenu(menu1, dish1, dish3, dish10, dish7).assignDishToMenu(menu2, dish2, dish4, dish6, dish8).assignDishToMenu(menu3, dish9, dish5, dish11, dish12);
 
+    }*/
+
+    loadObject = (data) => {
+        // Obtenemos los distintos datos de nuestro json
+        const categories = data.categories; // Categorias
+        const dishes = data.dishes; // Platos
+        const allergens = data.allergens; // Alergenos
+        const menus = data.menus; // Menus
+        const restaurants = data.restaurants; // Restaurantes
+
+        // Creamos las categorias y las añadimos al modelo
+        categories.forEach((category) => {
+            // Creamos la categoria
+            const cat = this[MODEL].createCategory(category.name, category.description, category.image);
+            // Añadimos las categorias al modelo
+            this[MODEL].addCategory(cat);
+        })
+
+        // Creamos los menus y los añadimos al modelo
+        menus.forEach((menu) => {
+            // Creamos los menus
+            const me = this[MODEL].createMenu(menu.name, menu.description);
+            // Lo añadimos al modelo
+            this[MODEL].addMenu(me);
+        });
+
+        // Creamos los alergenos y los añadimos al modelo
+        allergens.forEach((allergen) => {
+            // Creamos el alergenos
+            const aller = this[MODEL].createAllergen(allergen.name, allergen.description);
+
+            // Añadimos el alergeno a nuestro modelo
+            this[MODEL].addAllergen(aller);
+        });
+
+        // Creamos los platos y los añadimos al modelo
+        dishes.forEach((d) => {
+            // Creamos el plato
+            const dish = this[MODEL].createDish(d.id, d.name, d.description, d.ingredients, d.image, d.price);
+
+            this[MODEL].addDish(dish);
+
+            // Añadimos las respectivas asignaciones de nuestro plato
+            // Si existe una categoria para dicho plato se la asignamos
+            if (d.category != "") {
+                // Obtenemos la categoria
+                const cat = this[MODEL].getCategory(d.category);
+                // Creamos la asignacion con la categoria
+                this[MODEL].assignCategoryToDish(dish, cat);
+            }
+
+            // Si existe un menu para dicho plato creamos las respectivas asiganciones
+            if (d.menu != "") {
+                // Recorremos el array de posbles menus
+                for (const m of d.menu) {
+                    // Obtenemos el menu
+                    const menu = this[MODEL].getMenu(m);
+                    // Creamos las asignaciones con el menu
+                    this[MODEL].assignDishToMenu(menu.newMenu, dish);
+                }
+            }
+
+            // Si existen alergenos creamos su respectivas asignaciones
+            if (d.allergens != "") {
+                // Recorremos los alergenos de los platos
+                for (const aller of d.allergens) {
+                    // Obtenemos los alergenos 
+                    const allergen = this[MODEL].getAllergen(aller);
+                    // Creamos la asignacion con el alergeno
+                    this[MODEL].assignAllergenToDish(dish, allergen);
+                }
+            }
+        });
+
+        // Creamos los restaurantes y los añadimos al modelo
+        restaurants.forEach((restaurant) => {
+            // Creamos el restaurante
+            const res = this[MODEL].createRestaurant(restaurant.name, restaurant.description, restaurant.latitud, restaurant.longitud, restaurant.image);
+            // Añadimos el restaurante a nuestro modelo
+            this[MODEL].addRestaurant(res);
+        });
     }
 
     onLoad = () => {
-        if (getCookie('accetedCookieMessage') !== 'true') {
-            this[VIEW].showCookiesMessage();
-        }
-        const userCookie = getCookie('activeUser');
-        if (userCookie) {
-            const user = this[AUTH].getUser(userCookie);
-            if (user) {
-                this[USER] = user;
-                this.onOpenSession();
-            }
-        } else {
-            this.onCloseSession();
-        }
-        this[LOAD_RESTAURANT_OBJECT]();
-        this.onAddCategory();
+
+        fetch('./data/restaurant.json', {
+            method: 'get'
+        })
+            .then((respose) => respose.json())
+            .then((data) => {
+                // Llamamos al metodo correspondiente para cargar los datos
+                this.loadObject(data);
+            })
+            .then(() => {
+
+                if (getCookie('accetedCookieMessage') !== 'true') {
+                    this[VIEW].showCookiesMessage();
+                }
+                const userCookie = getCookie('activeUser');
+                if (userCookie) {
+                    const user = this[AUTH].getUser(userCookie);
+                    if (user) {
+                        this[USER] = user;
+                        this.onOpenSession();
+                    }
+                } else {
+                    this.onCloseSession();
+                }
+                this.onAddCategory();
+            })
     };
 
     onInit = () => {
@@ -106,6 +198,7 @@ class RestaurantController {
 
     onAddCategory = () => {
         this[VIEW].bindMenuEvents();
+        console.log(this[MODEL].getDishes());
         this[VIEW].showMenuAllergens(this[MODEL].getAllergens());
         this.onAddRestaurant();
         this.onAddMenu();
@@ -403,14 +496,11 @@ class RestaurantController {
         // Obtenemos los platos que tenemos almacenados en el localStorage
         const dishStorage = JSON.parse(localStorage.getItem("favDishes"));
 
-        console.log(dishStorage);
-
         // Array donde guardaremos los platos que tenemos almacenados
         const dishes = [];
 
         // Recorremos los platos que tenemos almacenados
         for (const d of dishStorage) {
-            console.log(d);
             // Obtenemos los platos
             const dish = this[MODEL].getDish(d);
             // Metemos los platos en el array

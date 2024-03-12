@@ -313,6 +313,7 @@ const RestaurantsManager = (function () {
                             return element.getName() === allergen.getName()
                         });
 
+
                         if (!estaPresente) {
                             actualDish.dishAllergens.push(allergen);
                         }
