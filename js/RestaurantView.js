@@ -121,6 +121,7 @@ class RestaurantView {
         suboptions.insertAdjacentHTML('beforeend', '<li><a id="lgestcat" class= "dropdown-item" href = "#gest-cat" >Gestión Categorias</a ></li > ');
         suboptions.insertAdjacentHTML('beforeend', '<li><a id="lnewrest" class= "dropdown-item" href = "#new-rest" >Crear Restaurante</a ></li > ');
         suboptions.insertAdjacentHTML('beforeend', '<li><a id="ldelcat" class= "dropdown-item" href = "#del-cat" >Eliminar Categoría</a ></li > ');
+        suboptions.insertAdjacentHTML('beforeend', '<li><a id="GenBack" class= "dropdown-item" href = "#gen-back" >Generar Backup</a ></li > ');
         menuOption.append(suboptions);
         this.nav.append(menuOption);
     }
@@ -575,15 +576,15 @@ justify-content-center">${message}</div>`);
         form.insertAdjacentHTML(
             "beforeend",
             `<div class= "col-md-3 mb-3" >
-                          <label class="form-label text-white" for="npdishes">Platos *</label>
-                          <div class="input-group">
-                              <label class="input-group-text" for="npdishes"><i class="bi bi-card-checklist"></i></label>
-                              <select class="form-select" name="npdishes" id="npdishes" multiple required>
-                              <option value="" id="menu"></option></select>
-                              <div class="invalid-feedback">Se debe elegir al menos un plato para el menú.</div>
-                              <div class="valid-feedback">Correcto.</div>
-                          </div>
-                      </div > `
+            <label class="form-label text-white" for="npdishes">Platos *</label>
+            <div class="input-group">
+                <label class="input-group-text" for="npdishes"><i class="bi bi-card-checklist"></i></label>
+                <select class="form-select" name="npdishes" id="npdishes" required>
+                <option value="" id="menu"></option></select>
+                <div class="invalid-feedback">Se debe elegir un menu al que asignarle un plato.</div>
+                <div class="valid-feedback">Correcto.</div>
+            </div>
+        </div>`
         );
 
         const npdishes = form.querySelector('#npdishes');
@@ -702,23 +703,23 @@ justify-content-center">${message}</div>`);
         </div>
 
         <div class="col-md-12 mb-3">
-        <label class="form-label text-white" for="nrCoordinate1">Coordenada X*</label>
+        <label class="form-label text-white" for="nrCoordinate1">Longitud*</label>
         <div class="input-group">
         <span class="input-group-text"><i class="bi bi-bodytext"></i></span>
         <input type="text" class="form-control" id="nrCoordinate1"
-        name="nrCoordinate1" placeholder="Ejem: 165" maxlength="3" value=""  required>
-        <div class="invalid-feedback">Puede contener caracteres alfanuméricos y algunos signos de puntuación.</div>
+        name="nrCoordinate1" placeholder="Ejem: 165" maxlength="3" value="" min="-180" max="180" required>
+        <div class="invalid-feedback">Es obligatorio elegir una longitud entre (-180 y 180).</div>
         <div class="valid-feedback">Correcto.</div>
         </div>
         </div>
 
         <div class="col-md-12 mb-3">
-        <label class="form-label text-white" for="nrCoordinate2">Coordenada Y*</label>
+        <label class="form-label text-white" for="nrCoordinate2">Latitud*</label>
         <div class="input-group">
         <span class="input-group-text"><i class="bi bi-bodytext"></i></span>
         <input type="text" class="form-control" id="nrCoordinate2"
-        name="nrCoordinate2" placeholder="Ejem: 190" maxlength="3" value=""  required>
-        <div class="invalid-feedback">Puede contener caracteres alfanuméricos y algunos signos de puntuación.</div>
+        name="nrCoordinate2" placeholder="Ejem: 80" maxlength="3" value="" min="-90" max="90" required>
+        <div class="invalid-feedback">Es obligatorio elegir una latitud entre (-90 y 90).</div>
         <div class="valid-feedback">Correcto.</div>
         </div>
         </div>
@@ -1098,7 +1099,7 @@ type="submit">Acceder</button>
     }
 
     // Bind para crear el menu de administración con el botón de crear y borrar
-    bindAdminMenu(hNewDish, hRemoveDish, hGestMenu, hGestCat, hNewRestaurant, hdelCategory) {
+    bindAdminMenu(hNewDish, hRemoveDish, hGestMenu, hGestCat, hNewRestaurant, hdelCategory, hgenerateBackup) {
         const newDishLink = document.getElementById('lnewdish');
         newDishLink.addEventListener('click', (event) => {
             this[EXCECUTE_HANDLER](hNewDish, [], '#new-dish', {
@@ -1144,6 +1145,17 @@ type="submit">Acceder</button>
             }, '#', event);
         });
 
+        const generateBackupLink = document.getElementById("GenBack");
+        generateBackupLink.addEventListener("click", (event) => {
+            this[EXCECUTE_HANDLER](
+                hgenerateBackup,
+                [],
+                "#generate-backup",
+                { action: "generateBackup" },
+                "#",
+                event
+            );
+        });
     }
 
     bindNewDishForm(handler) {
@@ -1161,8 +1173,8 @@ type="submit">Acceder</button>
         }
     }
 
-    bindGestMenuForm(handler) {
-        gestMenuValidation(handler);
+    bindGestMenuForm(handler1, handler2) {
+        gestMenuValidation(handler1, handler2);
     }
 
     bindGestCategory(handler) {

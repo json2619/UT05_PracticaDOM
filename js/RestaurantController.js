@@ -21,11 +21,7 @@ class RestaurantController {
         this[USER] = null;
         this[FAVDISHES] = [];
 
-
         this.onLoad();
-        this.onInit();
-
-        this[VIEW].bindInit(this.handleInit);
     }
 
     /*[LOAD_RESTAURANT_OBJECT]() {
@@ -81,13 +77,13 @@ class RestaurantController {
 
     }*/
 
-    loadObject = (data) => {
+    loadRestaurantObject = (restaurantData) => {
         // Obtenemos los distintos datos de nuestro json
-        const categories = data.categories; // Categorias
-        const dishes = data.dishes; // Platos
-        const allergens = data.allergens; // Alergenos
-        const menus = data.menus; // Menus
-        const restaurants = data.restaurants; // Restaurantes
+        const categories = restaurantData.categories; // Categorias
+        const dishes = restaurantData.dishes; // Platos
+        const allergens = restaurantData.allergens; // Alergenos
+        const menus = restaurantData.menus; // Menus
+        const restaurants = restaurantData.restaurants; // Restaurantes
 
         // Creamos las categorias y las añadimos al modelo
         categories.forEach((category) => {
@@ -164,30 +160,32 @@ class RestaurantController {
 
     onLoad = () => {
 
+        if (getCookie('accetedCookieMessage') !== 'true') {
+            this[VIEW].showCookiesMessage();
+        }
+        const userCookie = getCookie('activeUser');
+        if (userCookie) {
+            const user = this[AUTH].getUser(userCookie);
+            if (user) {
+                this[USER] = user;
+                this.onOpenSession();
+            }
+        } else {
+            this.onCloseSession();
+        }
+
         fetch('./data/restaurant.json', {
             method: 'get'
         })
             .then((respose) => respose.json())
-            .then((data) => {
+            .then((restaurantData) => {
                 // Llamamos al metodo correspondiente para cargar los datos
-                this.loadObject(data);
+                this.loadRestaurantObject(restaurantData);
             })
             .then(() => {
-
-                if (getCookie('accetedCookieMessage') !== 'true') {
-                    this[VIEW].showCookiesMessage();
-                }
-                const userCookie = getCookie('activeUser');
-                if (userCookie) {
-                    const user = this[AUTH].getUser(userCookie);
-                    if (user) {
-                        this[USER] = user;
-                        this.onOpenSession();
-                    }
-                } else {
-                    this.onCloseSession();
-                }
                 this.onAddCategory();
+                this.onInit();
+                this[VIEW].bindInit(this.handleInit);
             })
     };
 
@@ -198,7 +196,6 @@ class RestaurantController {
 
     onAddCategory = () => {
         this[VIEW].bindMenuEvents();
-        console.log(this[MODEL].getDishes());
         this[VIEW].showMenuAllergens(this[MODEL].getAllergens());
         this.onAddRestaurant();
         this.onAddMenu();
@@ -218,7 +215,7 @@ class RestaurantController {
         this[VIEW].bindDishFav(this.handleDisHFav);
         this[VIEW].bindCloseSession(this.handleCloseSession);
         this[VIEW].showAdminMenu();
-        this[VIEW].bindAdminMenu(this.handleNewDishForm, this.handleRemoveDishForm, this.handleGestMenuForm, this.handleGestCategoryForm, this.handleNewRestaurantForm, this.handleDelCategoryForm);
+        this[VIEW].bindAdminMenu(this.handleNewDishForm, this.handleRemoveDishForm, this.handleGestMenuForm, this.handleGestCategoryForm, this.handleNewRestaurantForm, this.handleDelCategoryForm, this.handleGenerateBackup);
     }
 
     onCloseSession() {
@@ -332,19 +329,16 @@ class RestaurantController {
 
     handleGestMenuForm = () => {
         this[VIEW].showAsigDesasigForm(this[MODEL].getDishes(), this[MODEL].getMenus());
-        this[VIEW].bindGestMenuForm(this.handleGestMenuAssign);
-        this[VIEW].bindGestMenuForm(this.handleGestMenuDesassign);
+        this[VIEW].bindGestMenuForm(this.handleGestMenuAssign, this.handleGestMenuDesassign);
     }
 
-    handleGestMenuAssign = (dishes, menuTitle) => {
+    handleGestMenuAssign = (dish, menuTitle) => {
         let done; let error; let menu;
         try {
             menu = this[MODEL].getMenu(menuTitle);
 
-            for (const dish of dishes) {
-                let dishSelected = this[MODEL].getDish(dish);
-                this[MODEL].assignDishToMenu(menu.newMenu, dishSelected);
-            }
+            let dishSelected = this[MODEL].getDish(dish);
+            this[MODEL].assignDishToMenu(menu.newMenu, dishSelected);
             this.onAddCategory();
             done = true;
         } catch (exception) {
@@ -353,15 +347,14 @@ class RestaurantController {
         }
     };
 
-    handleGestMenuDesassign = (dishes, menuTitle) => {
+    handleGestMenuDesassign = (dish, menuTitle) => {
         let done; let error; let menu;
         try {
             menu = this[MODEL].getMenu(menuTitle);
 
-            for (const dish of dishes) {
-                let dishSelected = this[MODEL].getDish(dish);
-                this[MODEL].deassignDishToMenu(menu.newMenu, dishSelected);
-            }
+            let dishSelected = this[MODEL].getDish(dish);
+            this[MODEL].deassignDishToMenu(menu.newMenu, dishSelected);
+
             this.onAddCategory();
             done = true;
         } catch (exception) {
@@ -435,13 +428,11 @@ class RestaurantController {
         this[VIEW].showMenuRestaurants(this[MODEL].getRestaurants());
     };
 
-    // manejador que nos permite abrir el formulario de Login
     handleLoginForm = () => {
         this[VIEW].showLogin();
         this[VIEW].bindLogin(this.handleLogin);
     };
 
-    // manejador que realiza la validación
     handleLogin = (username, password, remember) => {
         if (this[AUTH].validateUser(username, password)) {
             this[USER] = this[AUTH].getUser(username);
@@ -455,51 +446,37 @@ class RestaurantController {
         }
     };
 
-    // Manejador que cerrara la sesión
     handleCloseSession = () => {
         this.onCloseSession();
         this.onInit();
         this[VIEW].initHistory();
     };
 
-    // Manejador con el que añadiremos los platos a favoritos para un usuario en concreto
     handleAddDishToFav = (dishName) => {
         let done;
         let err;
 
-
-        // Si existe un usuario registrado, añadimos el plato a la lista de favoritos para ese usuario
         if (this[USER]) {
 
-            // Si existe un localStorage obtenemos los platos
             if (localStorage.getItem("favDishes")) {
                 this[FAVDISHES] = JSON.parse(localStorage.getItem("favDishes"));
             }
 
-            // Si la lista ya contiene el plato lanzamos error
             if (this[FAVDISHES].includes(dishName)) {
-                // Indicamos que no se ha realizado correctamente
                 done = false;
             } else {
-                // Añadimos el plato al array
                 this[FAVDISHES].push(dishName);
-                // Añadimos al localStorage el array con los platos favoritos
                 localStorage.setItem("favDishes", JSON.stringify(this[FAVDISHES]));
-                // Indicamos que se ha realizado correctamente
                 done = true;
             }
         }
     }
 
-    // Manejador para mostrar los platos favoritos que tenemos almacenados en nuestro localStorage
     handleDisHFav = () => {
-        // Obtenemos los platos que tenemos almacenados en el localStorage
         const dishStorage = JSON.parse(localStorage.getItem("favDishes"));
 
-        // Array donde guardaremos los platos que tenemos almacenados
         const dishes = [];
 
-        // Recorremos los platos que tenemos almacenados
         for (const d of dishStorage) {
             // Obtenemos los platos
             const dish = this[MODEL].getDish(d);
@@ -507,12 +484,85 @@ class RestaurantController {
             dishes.push(dish);
         }
 
-        // Mostramos al usuario desde la vista todos los platos que tiene marcados como favoritos
         this[VIEW].listProducts(
             dishes,
             "Platos favoritos"
         );
         this[VIEW].bindShowProduct(this.handleShowProduct);
+    }
+
+    handleGenerateBackup = () => {
+        const restaurantData = {
+            categories: [],
+            allergens: [],
+            menus: [],
+            restaurants: [],
+        }
+
+        // Recorremos las categorias que tenga nuestra aplicacion
+        for (const [key, value] of this[MODEL].getCategories()) {
+            restaurantData.categories.push({
+                name: value.getName(),
+                description: value.getDescription(),
+                image: value.getImage()
+            });
+        }
+
+        // Recorremos los alergenos
+        for (const [key, value] of this[MODEL].getAllergens()) {
+            restaurantData.allergens.push({
+                name: value.getName(),
+                description: value.getDescription()
+            });
+        }
+
+        // Recorremos los menus
+        for (const [key, value] of this[MODEL].getMenus()) {
+            restaurantData.menus.push({
+                name: value.newMenu.getName(),
+                description: value.newMenu.getDescription()
+            });
+        }
+
+        // Recorremos los restaurantes
+        for (const [key, value] of this[MODEL].getRestaurants()) {
+            restaurantData.restaurants.push({
+                name: value.getName(),
+                description: value.getDescription(),
+                location: value.getLocation(),
+                image: value.getImage()
+            });
+        }
+
+        const restaurantDataJson = JSON.stringify(restaurantData);
+
+        const time = new Date();
+
+        let hora = time.getHours();
+        let minutos = time.getMinutes();
+        let segundos = time.getSeconds();
+        let dia = time.getDate();
+        let mes = time.getMonth() + 1;
+        let año = time.getFullYear();
+
+        const fileName = `Backup_${hora + ":" + minutos + ":" + segundos + "|" + dia + "/" + mes + "/" + año}.json`;
+
+        const formData = new FormData();
+        formData.append("fileName", fileName);
+        formData.append("json", restaurantDataJson);
+
+        fetch("./php/Backup.php", {
+            method: 'post',
+            body: formData
+        }).then((response) => {
+            if (!response.ok) {
+                console.log("El guardado del Backup no ha sido posible");
+            } else {
+                console.log("El guardado del Backup se ha ejecutado correctamente");
+            }
+        }).catch((error) => {
+            console.log("Error generate backup" + error); // Mostramos el error
+        });
     }
 
 

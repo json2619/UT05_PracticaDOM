@@ -359,35 +359,22 @@ const RestaurantsManager = (function () {
 
         assignDishToMenu(menu, ...dishes) {
 
+
             for (const dish of dishes) {
                 // Verificar si la categoría y el plato son objetos válidos
                 if (!menu || !dish) {
                     throw new EmptyValueException();
                 }
 
-                // Verificar si la categoría y el plato existen en el sistema
-                if (this.#menus.has(menu.getName())) {
+                // Obtener la categoría existente y el plato existente
+                const actualMenu = this.#menus.get(menu.getName());
 
-                    // Obtener la categoría existente y el plato existente
-                    const actualMenu = this.#menus.get(menu.getName());
+                let estaPresente = actualMenu.dishMenuArr.some(function (element) {
+                    return element.getName() === dish.getName()
+                });
 
-                    if (this.#dishes.has(dish.getName())) {
-
-                        let estaPresente = actualMenu.dishMenuArr.some(function (element) {
-                            return element.getName() === dish.getName()
-                        });
-
-                        if (!estaPresente) {
-                            actualMenu.dishMenuArr.push(dish);
-                        }
-
-                    } else {
-                        this.addDish(dish);
-                    }
-
-                } else {
-                    this.addMenu(menu);
-                    this.#menus.get(menu.getName()).dishMenuArr.push(dish);
+                if (estaPresente !== -1) {
+                    actualMenu.dishMenuArr.push(dish);
                 }
             }
 

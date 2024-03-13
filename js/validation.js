@@ -111,7 +111,7 @@ function newDishValidation(handler) {
     form.ndUrl.addEventListener('change', defaultCheckElement);
 }
 
-function gestMenuValidation(handler) {
+function gestMenuValidation(handler1, handler2) {
     const form = document.forms.fGestMenu;
     form.setAttribute('novalidate', true);
     form.addEventListener('submit', function (event) {
@@ -134,11 +134,8 @@ function gestMenuValidation(handler) {
         if (!isValid) {
             firstInvalidElement.focus();
         } else {
-            const dishes = [...this.npdishes.selectedOptions].map(
-                (option) => option.value
-            );
-            handler(
-                dishes, this.npmenus.value
+            handler1(
+                this.npdishes.value, this.npmenus.value
             );
         }
         event.preventDefault();
@@ -165,11 +162,8 @@ function gestMenuValidation(handler) {
         if (!isValid) {
             firstInvalidElement.focus();
         } else {
-            const dishes = [...this.npdishes.selectedOptions].map(
-                (option) => option.value
-            );
-            handler(
-                dishes, this.npmenus.value
+            handler2(
+                this.npdishes.value, this.npmenus.value
             );
         }
         event.preventDefault();
