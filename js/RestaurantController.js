@@ -472,29 +472,11 @@ class RestaurantController {
         }
     }
 
-    handleDisHFav = () => {
-        const dishStorage = JSON.parse(localStorage.getItem("favDishes"));
-
-        const dishes = [];
-
-        for (const d of dishStorage) {
-            // Obtenemos los platos
-            const dish = this[MODEL].getDish(d);
-            // Metemos los platos en el array
-            dishes.push(dish);
-        }
-
-        this[VIEW].listProducts(
-            dishes,
-            "Platos favoritos"
-        );
-        this[VIEW].bindShowProduct(this.handleShowProduct);
-    }
-
     handleGenerateBackup = () => {
         const restaurantData = {
             categories: [],
             allergens: [],
+            dishes: [],
             menus: [],
             restaurants: [],
         }
@@ -516,11 +498,38 @@ class RestaurantController {
             });
         }
 
+        // Recorremos los platos
+        for (const [key, value] of this[MODEL].getDishes()) {
+            let dishesCategories = [];
+            let dishesAllergens = [];
+            for (const category of value.dishCategory) {
+                dishesCategories.push(category.getName());
+            }
+            for (const allergen of value.dishAllergens) {
+                dishesAllergens.push(allergen.getName());
+            }
+            restaurantData.dishes.push({
+                serial: value.newDish.getSerial(),
+                name: value.newDish.getName(),
+                description: value.newDish.getDescription(),
+                ingredients: value.newDish.getIngredients(),
+                image: value.newDish.getImage(),
+                price: value.newDish.getPrice(),
+                categories: dishesCategories,
+                allergens: dishesAllergens
+            });
+        }
+
         // Recorremos los menus
         for (const [key, value] of this[MODEL].getMenus()) {
+            let dishesInMenu = [];
+            for (const dish of value.dishMenuArr) {
+                dishesInMenu.push(dish.getName());
+            }
             restaurantData.menus.push({
                 name: value.newMenu.getName(),
-                description: value.newMenu.getDescription()
+                description: value.newMenu.getDescription(),
+                platos: dishesInMenu
             });
         }
 
@@ -534,8 +543,6 @@ class RestaurantController {
             });
         }
 
-        const restaurantDataJson = JSON.stringify(restaurantData);
-
         const time = new Date();
 
         let hora = time.getHours();
@@ -543,25 +550,25 @@ class RestaurantController {
         let segundos = time.getSeconds();
         let dia = time.getDate();
         let mes = time.getMonth() + 1;
-        let año = time.getFullYear();
+        let ano = time.getFullYear();
 
-        const fileName = `Backup_${hora + ":" + minutos + ":" + segundos + "|" + dia + "/" + mes + "/" + año}.json`;
+        const fileName = `Backup_${ano}-${mes}-${dia}_${hora}-${minutos}-${segundos}.json`;
 
-        const formData = new FormData();
+        let formData = new FormData();
         formData.append("fileName", fileName);
-        formData.append("json", restaurantDataJson);
+        formData.append("json", JSON.stringify(restaurantData));
 
-        fetch("./php/Backup.php", {
+        fetch("./Backup.php", { // Replace with your actual domain
             method: 'post',
             body: formData
         }).then((response) => {
             if (!response.ok) {
-                console.log("El guardado del Backup no ha sido posible");
+                console.log("Backup fallido");
             } else {
-                console.log("El guardado del Backup se ha ejecutado correctamente");
+                console.log("Backup hecho correctamente");
             }
         }).catch((error) => {
-            console.log("Error generate backup" + error); // Mostramos el error
+            console.log("Error al generar el backup" + error); // Mostramos el error
         });
     }
 
